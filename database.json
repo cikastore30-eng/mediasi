@@ -1,0 +1,15 @@
+{
+  "_info": "Database auth MediaFire APK Center. Password TIDAK disimpan polos, hanya hash PBKDF2. Jangan ubah manual, pakai tombol Ganti Password di panel admin.",
+  "version": 1,
+  "admin": {
+    "algorithm": "PBKDF2-SHA256",
+    "iterations": 210000,
+    "salt": "0e84c308b3275b3b9956be3d89a82145",
+    "hash": "3743a2ecb36b64b3e1dc56acbfe228acbde7cdecf45625a2809f900cc51923ef"
+  },
+  "security": {
+    "maxAttempts": 5,
+    "lockoutSeconds": 300,
+    "minPasswordLength": 10
+  }
+}
