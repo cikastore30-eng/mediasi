@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "owner": "cikastore30-eng",
+  "repo": "mediasi",
+  "kdf": {
+    "algorithm": "PBKDF2-SHA256",
+    "iterations": 600000,
+    "salt": "h74d1dL/owkKCq5NuPBhzA=="
+  },
+  "enc": {
+    "algorithm": "AES-256-GCM",
+    "iv": "fL0QA6vHsohDPywB",
+    "data": "3w74fXpdNEaJKRyGYpUAq+NVFBgE2GhGM4YTc43O/gFLxOQCOVSXtvMaWZu1XmnsoavTc/1MfmQ="
+  }
+}
