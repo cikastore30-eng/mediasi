@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com https://api.counterapi.dev">
 <title>MediaFire APK Center - Download APK Android via MediaFire</title>
 <meta name="description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -103,7 +103,18 @@ body {
 }
 
 /* Header */
-.top { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; position: relative;}
+.top { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; position: relative;}
+.top-title { flex: 1 1 200px; min-width: 0; }
+.top-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.icon-btn { width: 34px; height: 34px; display: grid; place-items: center; background: transparent;
+  border: 1px solid var(--line); color: var(--muted); border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 16px; line-height: 1; }
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn:hover { background: var(--surface-2); color: var(--fg); }
+.visit-stats { display: flex; gap: 10px; align-items: stretch; margin-bottom: 16px; }
+.visit-stats > div { flex: 1; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.visit-stats .n { display: block; font-size: 1.4rem; font-weight: 700; font-family: var(--font-display); }
+.visit-stats .l { font-size: 12px; color: var(--muted); }
+.visit-stats .icon-btn { align-self: center; }
 .mark {
   width: 42px; height: 42px; flex: none;
   display: grid; place-items: center;
@@ -123,9 +134,8 @@ h1 {
 
 /* Tombol Admin Rahasia */
 .admin-toggle {
-  position: absolute; right: 0; top: 10px;
   background: transparent; border: 1px solid var(--line);
-  color: var(--muted); padding: 6px 12px; border-radius: 8px;
+  color: var(--muted); padding: 7px 12px; border-radius: 8px;
   font-size: 12px; cursor: pointer; font-weight: 600; transition: 0.2s;
 }
 .admin-toggle:hover { background: var(--surface-2); color: var(--fg); }
@@ -286,18 +296,28 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     <div class="mark" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
     </div>
-    <div>
+    <div class="top-title">
       <h1>MediaFire APK Center</h1>
       <p class="tag">Kumpulan link unduh APK MediaFire — cari, salin, dan unduh dengan mudah.</p>
     </div>
     
     <!-- TOMBOL LOGIN ADMIN -->
-    <button class="admin-toggle" id="adminToggle" type="button" onclick="toggleAdminMode()">🔒 Admin</button>
+    <div class="top-actions">
+      <button class="icon-btn" id="shareBtn" type="button" onclick="shareSite()" aria-label="Bagikan link website" title="Bagikan link website">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </button>
+      <button class="admin-toggle" id="adminToggle" type="button" onclick="toggleAdminMode()">🔒 Admin</button>
+    </div>
   </header>
 
   <div class="layout">
     <!-- PANEL FORM & STATISTIK (DISEMBUNYIKAN) -->
     <section class="panel hidden-admin" id="adminPanel" aria-labelledby="form-title">
+      <div class="visit-stats" aria-live="polite">
+        <div><span class="n" id="visitTotal">…</span><span class="l">Total pengunjung</span></div>
+        <div><span class="n" id="visitToday">…</span><span class="l">Hari ini</span></div>
+        <button class="icon-btn" type="button" onclick="loadVisitStats()" aria-label="Perbarui statistik" title="Perbarui">↻</button>
+      </div>
       <h2 id="form-title">Tambah APK</h2>
       <form id="form" novalidate>
         <div class="field">
@@ -346,6 +366,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
 <footer class="wrap" style="padding-top:0;color:var(--muted);font-size:13px">
   <h2 style="font-size:15px;color:var(--fg);margin:0 0 6px">Tentang MediaFire APK Center</h2>
   <p style="margin:0;max-width:70ch">MediaFire APK Center adalah kumpulan link download APK Android yang disimpan di MediaFire. Gunakan kolom pencarian untuk menemukan nama aplikasi atau versi tertentu, lalu klik Unduh untuk membuka file di MediaFire atau Salin untuk membagikan link-nya. Daftar diperbarui oleh admin secara berkala.</p>
+  <p style="margin:8px 0 0"><a href="https://mediaas.site.web.id/" style="color:var(--accent)">mediaas.site.web.id</a></p>
 </footer>
 <div class="toast" id="toast" role="status"></div>
 
@@ -595,6 +616,46 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
   }
   function setLock(o) { try { localStorage.setItem(LOCK_KEY, JSON.stringify(o)); } catch (e) {} }
 
+  /* ---------- pengunjung & bagikan website ---------- */
+  var SITE_URL = "https://mediaas.site.web.id/";
+  var COUNTER_URL = "https://api.counterapi.dev/v1/mediaas-site-web-id/";
+
+  function dayKey() {
+    return "d" + new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" }).replace(/-/g, "");
+  }
+  async function counterCall(name, up) {
+    var r = await fetch(COUNTER_URL + name + "/" + (up ? "up" : ""), { cache: "no-store" });
+    if (r.status === 404) return 0;               // belum pernah dihitung
+    if (!r.ok) throw new Error(r.status);
+    var j = await r.json();
+    var n = j.count != null ? j.count : (j.value != null ? j.value : (j.data && j.data.up_count));
+    return Number(n) || 0;
+  }
+  // hitung 1 kunjungan per browser per hari (kunjungan admin tidak dihitung)
+  async function countVisit() {
+    try {
+      var today = dayKey();
+      if (localStorage.getItem("mf_visit_day") === today) return;
+      await Promise.all([counterCall("total", true), counterCall(today, true)]);
+      localStorage.setItem("mf_visit_day", today);
+    } catch (e) {}
+  }
+  window.loadVisitStats = async function () {
+    var t = $("visitTotal"), d = $("visitToday");
+    t.textContent = "…"; d.textContent = "…";
+    try {
+      var r = await Promise.all([counterCall("total", false), counterCall(dayKey(), false)]);
+      t.textContent = r[0].toLocaleString("id-ID");
+      d.textContent = r[1].toLocaleString("id-ID");
+    } catch (e) { t.textContent = "—"; d.textContent = "—"; }
+  };
+  window.shareSite = async function () {
+    try {
+      if (navigator.share) { await navigator.share({ title: "MediaFire APK Center", text: "Download APK lewat MediaFire", url: SITE_URL }); return; }
+    } catch (e) { if (e && e.name === "AbortError") return; }
+    copyText(SITE_URL);
+  };
+
   /* ---------- admin ---------- */
   function setAdminUI(on) {
     isAdminLoggedIn = on;
@@ -603,6 +664,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     $("adminToggle").classList.toggle("active", on);
     $("adminToggle").textContent = on ? "🔓 Keluar Admin" : "🔒 Admin";
     if (!on) { state.confirmId = null; resetForm(); }
+    if (on) window.loadVisitStats();
     render();
   }
 
@@ -945,6 +1007,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     render();
     await loadLinks();
     if (readCfg()) adminLogin(true);   // lanjut sebagai admin bila token tersimpan
+    else countVisit();                 // pengunjung biasa dihitung
   }
   boot();
 })();
