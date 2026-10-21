@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com">
 <title>MediaFire APK Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -262,7 +263,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     </div>
     <div>
       <h1>MediaFire APK Center</h1>
-      <p class="tag">Pusat link APK MediaFire — simpan, susun, dan cari APK dengan mudah.</p>
+      <p class="tag">Kumpulan link unduh APK MediaFire — cari, salin, dan unduh dengan mudah.</p>
     </div>
     
     <!-- TOMBOL LOGIN ADMIN -->
@@ -284,7 +285,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
         </div>
         <div class="field">
           <label for="note">Catatan (opsional)</label>
-          <textarea id="note" maxlength="500" placeholder="Versi APK, ukuran file, password, atau keterangan lain"></textarea>
+          <textarea id="note" maxlength="500" placeholder="Versi APK, ukuran file, atau keterangan lain"></textarea>
         </div>
         <p class="err" id="err" role="alert"></p>
         <div class="row">
@@ -292,22 +293,6 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
           <button class="ghost" id="cancel" type="button" hidden>Batal</button>
         </div>
 
-        <button class="ghost" type="button" onclick="changeAdminPassword()">🔑 Ganti Password Admin</button>
-
-        <!-- DIV UNTUK STATISTIK (HANYA MUNCUL DI PANEL ADMIN) -->
-        <div id="adminStats" style="margin-top: 20px; border-top: 1px solid var(--line); padding-top: 15px;">
-          <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--fg);">📊 Statistik Website</h3>
-          <div style="display: flex; gap: 10px;">
-            <div style="flex: 1; background: var(--surface-2); padding: 10px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 12px; color: var(--muted);">Total Dikunjungi</div>
-              <div id="visitCount" style="font-size: 20px; font-weight: bold; color: var(--accent);">0</div>
-            </div>
-            <div style="flex: 1; background: var(--surface-2); padding: 10px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 12px; color: var(--muted);">Kunjungan Hari Ini</div>
-              <div id="visitToday" style="font-size: 20px; font-weight: bold; color: var(--accent);">0</div>
-            </div>
-          </div>
-        </div>
       </form>
     </section>
 
@@ -336,186 +321,8 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var LS_KEY = "mediafire-apk-center-v1";
-
-  // ==========================================
-  // 1. AUTH ADMIN (password disimpan sbg HASH di database.json)
-  // ==========================================
-  var AUTH = null;      // { admin:{...}, security:{...} } dari database.json
+  var state = { links: [], ready: false, failed: false, q: "", sort: "new", editId: null, confirmId: null };
   var isAdminLoggedIn = false;
-  var LOCK_KEY = "mf_admin_lock";
-
-  var authReady = (async function () {
-    try {
-      var r = await fetch("database.json", { cache: "no-store" });
-      if (!r.ok) throw new Error(r.status);
-      var j = await r.json();
-      if (!j || !j.admin || !j.admin.hash || !j.admin.salt) throw new Error("format");
-      AUTH = j;
-    } catch (e) { AUTH = null; }
-  })();
-
-  function hexToBytes(h) {
-    var a = new Uint8Array(h.length / 2);
-    for (var i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16);
-    return a;
-  }
-  function bytesToHex(buf) {
-    return Array.prototype.map.call(new Uint8Array(buf), function (b) {
-      return ("0" + b.toString(16)).slice(-2);
-    }).join("");
-  }
-  async function hashPassword(pass, saltHex, iter) {
-    var key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveBits"]);
-    var bits = await crypto.subtle.deriveBits(
-      { name: "PBKDF2", hash: "SHA-256", salt: hexToBytes(saltHex), iterations: iter }, key, 256);
-    return bytesToHex(bits);
-  }
-  function safeEqual(a, b) {
-    if (a.length !== b.length) return false;
-    var r = 0;
-    for (var i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
-    return r === 0;
-  }
-
-  // Pembatasan percobaan salah (anti tebak-tebakan)
-  function getLock() {
-    try { return JSON.parse(localStorage.getItem(LOCK_KEY)) || { fails: 0, until: 0 }; }
-    catch (e) { return { fails: 0, until: 0 }; }
-  }
-  function setLock(o) { try { localStorage.setItem(LOCK_KEY, JSON.stringify(o)); } catch (e) {} }
-
-  function enterAdmin() {
-    isAdminLoggedIn = true;
-    $("adminPanel").classList.remove("hidden-admin");
-    $("publicListArea").style.gridColumn = "auto";
-    $("adminToggle").classList.add("active");
-    $("adminToggle").textContent = "🔓 Keluar Admin";
-    toast("Selamat datang, Admin!");
-    updateVisitorStats();
-    render();
-  }
-  function leaveAdmin() {
-    isAdminLoggedIn = false;
-    $("adminPanel").classList.add("hidden-admin");
-    $("publicListArea").style.gridColumn = "1 / -1";
-    $("adminToggle").classList.remove("active");
-    $("adminToggle").textContent = "🔒 Admin";
-    toast("Mode Admin dinonaktifkan");
-    render();
-  }
-
-  // ==========================================
-  // 2. FUNGSI LOGIN ADMIN
-  // ==========================================
-  window.toggleAdminMode = async function () {
-    if (isAdminLoggedIn) { leaveAdmin(); return; }
-
-    await authReady;
-    if (!AUTH) { toast("database.json tidak ditemukan. Buka lewat hosting/https, bukan file langsung."); return; }
-    if (!(window.crypto && crypto.subtle)) { toast("Browser butuh https atau localhost untuk login."); return; }
-
-    var sec = AUTH.security || {};
-    var maxTry = sec.maxAttempts || 5, lockSec = sec.lockoutSeconds || 300;
-    var lock = getLock();
-    if (lock.until > Date.now()) {
-      toast("Terlalu banyak percobaan. Coba lagi " + Math.ceil((lock.until - Date.now()) / 1000) + " detik lagi.");
-      return;
-    }
-
-    var pass = prompt("Masukkan Password Admin:");
-    if (pass === null) return;
-
-    var got;
-    try { got = await hashPassword(pass, AUTH.admin.salt, AUTH.admin.iterations || 210000); }
-    catch (e) { toast("Gagal memeriksa password."); return; }
-
-    if (safeEqual(got, AUTH.admin.hash)) {
-      setLock({ fails: 0, until: 0 });
-      enterAdmin();
-    } else {
-      lock.fails = (lock.fails || 0) + 1;
-      if (lock.fails >= maxTry) { lock = { fails: 0, until: Date.now() + lockSec * 1000 }; toast("❌ Password salah. Dikunci " + lockSec + " detik."); }
-      else { toast("❌ Password Salah! Sisa percobaan: " + (maxTry - lock.fails)); }
-      setLock(lock);
-    }
-  };
-
-  // Ganti password -> hasilkan database.json baru untuk diupload ulang
-  window.changeAdminPassword = async function () {
-    if (!isAdminLoggedIn || !AUTH) return;
-    var minLen = (AUTH.security && AUTH.security.minPasswordLength) || 10;
-    var p1 = prompt("Password baru (minimal " + minLen + " karakter):");
-    if (p1 === null) return;
-    if (p1.length < minLen) { toast("Password terlalu pendek."); return; }
-    var p2 = prompt("Ulangi password baru:");
-    if (p2 !== p1) { toast("Password tidak sama."); return; }
-
-    var iter = AUTH.admin.iterations || 210000;
-    var saltHex = bytesToHex(crypto.getRandomValues(new Uint8Array(16)));
-    var hash = await hashPassword(p1, saltHex, iter);
-    var next = JSON.parse(JSON.stringify(AUTH));
-    next.admin.salt = saltHex;
-    next.admin.hash = hash;
-
-    var blob = new Blob([JSON.stringify(next, null, 2)], { type: "application/json" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "database.json";
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-    toast("Upload database.json baru ke hosting agar password berubah.");
-  };
-
-  // ==========================================
-  // 3. FITUR PENGHITUNG PENGUNJUNG (LOCAL STORAGE)
-  // ==========================================
-  function updateVisitorStats() {
-    try {
-      var today = new Date().toDateString();
-      
-      // Ambil data lama
-      var total = parseInt(localStorage.getItem('visit_total') || "0");
-      var todayCount = parseInt(localStorage.getItem('visit_today') || "0");
-      var lastVisitDate = localStorage.getItem('visit_date');
-
-      // Kalo ganti hari, reset hitungan hari ini
-      if (lastVisitDate !== today) {
-        todayCount = 0;
-      }
-
-      // Simpan data kunjungan baru (tambah 1)
-      total += 1;
-      todayCount += 1;
-
-      localStorage.setItem('visit_total', total);
-      localStorage.setItem('visit_today', todayCount);
-      localStorage.setItem('visit_date', today);
-
-      // Tampilkan di panel admin (kalo elemennya ada)
-      if ($("visitCount")) $("visitCount").textContent = total;
-      if ($("visitToday")) $("visitToday").textContent = todayCount;
-      
-    } catch (e) {
-      console.log("Gagal update statistik", e);
-    }
-  }
-
-  // ==========================================
-  // 4. DATA DEFAULT APK (Bisa Ditambah Manual)
-  // ==========================================
-  var DEFAULT_APKS = [
-    {
-      id: "apk-contoh-001",
-      name: "CIKA V2I",
-      url: "https://www.mediafire.com/file/cgcp1y3zxj5oi9k/CIKA_STORE_V2.apk/file",
-      note: "Isi keterangan atau versi APK di sini",
-      createdAt: 1792540800000
-    }
-  ];
-
-  var state = { links: [], ready: false, mode: null, q: "", sort: "new", editId: null, confirmId: null };
-  var db = null;
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -549,72 +356,189 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(toast._t);
-    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2400);
+    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2800);
   }
 
+  /* ---------- GitHub sebagai penyimpanan ----------
+     Publik  : membaca links.json dari situs ini (GitHub Pages).
+     Admin   : menulis links.json ke repo lewat GitHub API memakai token admin.
+     Token hanya ada di browser admin, tidak pernah ditaruh di kode/repo. */
+  var CFG_KEY = "mf_gh_cfg";
+  var LINKS_PATH = "links.json";
+  var GH = { owner: "", repo: "", branch: "main", token: "", sha: "" };
+
+  function utf8ToB64(str) { return btoa(unescape(encodeURIComponent(str))); }
+  function b64ToUtf8(b64) { return decodeURIComponent(escape(atob(String(b64).replace(/\s/g, "")))); }
   function newId() {
     try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
-
-  /* ---------- penyimpanan ---------- */
-  function loadLocal() {
+  function readCfg() {
     try {
-      var raw = localStorage.getItem(LS_KEY);
-      var arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : DEFAULT_APKS.slice();
-    } catch (e) { return []; }
+      var raw = sessionStorage.getItem(CFG_KEY) || localStorage.getItem(CFG_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
   }
-  function saveLocal() {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(state.links)); return true; } catch (e) { return false; }
+  function writeCfg(cfg, remember) {
+    try {
+      sessionStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+      if (remember) localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+    } catch (e) {}
   }
-  function useLocal() {
-    state.mode = "local";
-    state.links = loadLocal();
+  function clearCfg() {
+    try { sessionStorage.removeItem(CFG_KEY); localStorage.removeItem(CFG_KEY); } catch (e) {}
+  }
+  function detectRepo() {
+    var h = location.hostname, parts = location.pathname.split("/").filter(Boolean);
+    if (/\.github\.io$/i.test(h)) {
+      var owner = h.split(".")[0];
+      var repo = (parts[0] && !/\.html?$/i.test(parts[0])) ? parts[0] : owner + ".github.io";
+      return { owner: owner, repo: repo };
+    }
+    return null;
+  }
+
+  async function ghFetch(path, opt) {
+    opt = opt || {};
+    var headers = {
+      "Accept": "application/vnd.github+json",
+      "Authorization": "Bearer " + GH.token,
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+    if (opt.body) headers["Content-Type"] = "application/json";
+    var r = await fetch("https://api.github.com" + path, { method: opt.method || "GET", headers: headers, body: opt.body, cache: "no-store" });
+    var data = null;
+    try { data = await r.json(); } catch (e) {}
+    if (!r.ok) {
+      var err = new Error(r.status === 401 ? "Token salah atau sudah kedaluwarsa."
+        : r.status === 403 ? "Token tidak punya izin (atau batas GitHub tercapai)."
+        : r.status === 404 ? "Repo/file tidak ditemukan atau token tidak punya akses ke repo ini."
+        : (data && data.message) || ("GitHub error " + r.status));
+      err.status = r.status;
+      throw err;
+    }
+    return data;
+  }
+
+  function contentsPath() {
+    return "/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo) + "/contents/" + LINKS_PATH;
+  }
+  function parseLinksJSON(text) {
+    var j = JSON.parse(text);
+    return Array.isArray(j) ? j : (Array.isArray(j.links) ? j.links : []);
+  }
+
+  // ambil versi terbaru dari GitHub (admin) beserta sha untuk commit berikutnya
+  async function pullAdmin() {
+    try {
+      var d = await ghFetch(contentsPath() + "?ref=" + encodeURIComponent(GH.branch));
+      GH.sha = d.sha;
+      state.links = parseLinksJSON(b64ToUtf8(d.content));
+    } catch (e) {
+      if (e.status === 404) { GH.sha = ""; state.links = []; }   // file belum ada -> akan dibuat
+      else throw e;
+    }
+  }
+  async function pushAdmin(message) {
+    var body = {
+      message: message,
+      content: utf8ToB64(JSON.stringify({ links: state.links }, null, 2) + "\n"),
+      branch: GH.branch
+    };
+    if (GH.sha) body.sha = GH.sha;
+    var res = await ghFetch(contentsPath(), { method: "PUT", body: JSON.stringify(body) });
+    GH.sha = res.content.sha;
+  }
+  // selalu tarik data terbaru dulu supaya tidak menimpa perubahan lain
+  async function mutate(message, fn) {
+    await pullAdmin();
+    fn(state.links);
+    await pushAdmin(message);
+    render();
+  }
+
+  // daftar publik: dibaca dari links.json di situs ini
+  async function loadLinks() {
+    try {
+      var r = await fetch(LINKS_PATH + "?v=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) throw new Error(r.status);
+      state.links = parseLinksJSON(await r.text());
+      state.failed = false;
+    } catch (e) { state.failed = true; }
     state.ready = true;
     render();
   }
 
-  async function persist(item) {
-    if (state.mode === "db") {
-      await db.collection("links").doc(item.id).set({
-        name: item.name, url: item.url, note: item.note, createdAt: item.createdAt
-      });
-    } else {
-      var i = state.links.findIndex(function (l) { return l.id === item.id; });
-      if (i >= 0) state.links[i] = item; else state.links.unshift(item);
-      if (!saveLocal()) throw new Error("local");
-      render();
-    }
-  }
-  async function removeItem(id) {
-    if (state.mode === "db") {
-      await db.collection("links").doc(id).delete();
-    } else {
-      state.links = state.links.filter(function (l) { return l.id !== id; });
-      saveLocal();
-      render();
-    }
+  /* ---------- admin ---------- */
+  function setAdminUI(on) {
+    isAdminLoggedIn = on;
+    $("adminPanel").classList.toggle("hidden-admin", !on);
+    $("publicListArea").style.gridColumn = on ? "auto" : "1 / -1";
+    $("adminToggle").classList.toggle("active", on);
+    $("adminToggle").textContent = on ? "🔓 Keluar Admin" : "🔒 Admin";
+    if (!on) { state.confirmId = null; resetForm(); }
+    render();
   }
 
-  async function boot() {
-    // Panggil fungsi update statistik pas web pertama kali dibuka
-    updateVisitorStats();
-    
-    render();
-    try { db = (window.claude && window.claude.use) ? await window.claude.use("db") : null; } catch (e) { db = null; }
-    if (!db) { useLocal(); return; }
-    state.mode = "db";
+  async function adminLogin(silent) {
+    var cfg = readCfg();
+    var info = (cfg && cfg.owner) ? { owner: cfg.owner, repo: cfg.repo } : detectRepo();
+    if (!info) {
+      if (silent) return;
+      var rp = prompt("Nama repo GitHub kamu (format: username/nama-repo):");
+      if (!rp || rp.indexOf("/") < 1) return;
+      var x = rp.trim().split("/");
+      info = { owner: x[0], repo: x[1] };
+    }
+    var token = cfg && cfg.token;
+    var fresh = false;
+    if (!token) {
+      if (silent) return;
+      token = prompt("Tempel GitHub Token admin (github_pat_...):");
+      if (!token) return;
+      token = token.trim();
+      fresh = true;
+    }
+    GH.owner = info.owner; GH.repo = info.repo; GH.token = token;
     try {
-      db.collection("links").onSnapshot(function (snap) {
-        state.links = snap.docs.map(function (d) {
-          var o = d.data() || {};
-          return { id: d.id, name: o.name, url: o.url, note: o.note, createdAt: o.createdAt };
-        });
-        state.ready = true;
-        render();
-      }, function () { db = null; useLocal(); });
-    } catch (e) { db = null; useLocal(); }
+      var repo = await ghFetch("/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo));
+      if (!repo.permissions || !repo.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
+      GH.branch = repo.default_branch || "main";
+      await pullAdmin();
+    } catch (e) {
+      GH.token = "";
+      if (!silent || (e.status === 401)) clearCfg();
+      if (!silent) toast("❌ " + e.message);
+      return;
+    }
+    if (fresh) {
+      var remember = confirm("Ingat token di perangkat ini?\n\nOK = tidak perlu tempel token lagi di HP/komputer ini.\nBatal = token hilang saat tab ditutup.");
+      writeCfg({ owner: GH.owner, repo: GH.repo, token: GH.token }, remember);
+    }
+    setAdminUI(true);
+    toast("Selamat datang, Admin!");
+  }
+
+  window.toggleAdminMode = async function () {
+    if (isAdminLoggedIn) {
+      clearCfg();
+      GH.token = ""; GH.sha = "";
+      setAdminUI(false);
+      await loadLinks();
+      toast("Keluar dari mode Admin. Token dihapus dari perangkat ini.");
+      return;
+    }
+    await adminLogin(false);
+  };
+
+  function handleAuthError(err) {
+    if (err && err.status === 401) {
+      clearCfg(); GH.token = "";
+      setAdminUI(false);
+      toast("Token tidak berlaku lagi. Masuk admin dengan token baru.");
+      return true;
+    }
+    return false;
   }
 
   /* ---------- tampilan ---------- */
@@ -645,11 +569,10 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     var date = l.createdAt ? new Date(l.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : "";
     var sub = p ? (p.kind + (p.id ? " · " + p.id : "")) : "Link tidak valid";
     var actions;
-    
-    // TOMBOL EDIT & HAPUS HANYA MUNCUL KALO ADMIN
-    var adminButtons = isAdminLoggedIn ? 
+
+    var adminButtons = isAdminLoggedIn ?
       '<button type="button" data-act="edit" data-id="' + esc(l.id) + '" aria-label="Ubah ' + esc(l.name) + '">' + ICON.edit + 'Ubah</button>' +
-      '<button type="button" class="danger" data-act="del" data-id="' + esc(l.id) + '" aria-label="Hapus ' + esc(l.name) + '">' + ICON.del + '</button>' 
+      '<button type="button" class="danger" data-act="del" data-id="' + esc(l.id) + '" aria-label="Hapus ' + esc(l.name) + '">' + ICON.del + '</button>'
       : '';
 
     if (state.confirmId === l.id) {
@@ -658,7 +581,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
         '<button type="button" class="ghost" data-act="del-no">Batal</button></div>';
     } else {
       actions = '<div class="acts">' +
-        (href ? '<a class="btn open" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + ICON.open + 'Buka</a>' : '') +
+        (href ? '<a class="btn open" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + ICON.open + 'Unduh</a>' : '') +
         '<button type="button" data-act="copy" data-id="' + esc(l.id) + '">' + ICON.copy + 'Salin</button>' +
         adminButtons +
         '</div>';
@@ -682,15 +605,17 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
       return;
     }
     var arr = visible();
-    if (!total) {
+    if (state.failed && !total) {
+      list.innerHTML = '<div class="empty"><strong>Gagal memuat daftar</strong><p>Periksa koneksi lalu muat ulang halaman.</p></div>';
+    } else if (!total) {
       list.innerHTML = '<div class="empty"><strong>Belum ada APK</strong><p>Admin belum menambahkan link MediaFire.</p></div>';
     } else if (!arr.length) {
       list.innerHTML = '<div class="empty"><strong>Tidak ada yang cocok</strong><p>Coba kata kunci lain, atau hapus isi kolom pencarian.</p></div>';
     } else {
       list.innerHTML = arr.map(cardHTML).join("");
     }
-    $("count").textContent = state.q.trim() ? (arr.length + " dari " + total + " link") : (total + " link tersimpan");
-    $("where").innerHTML = '<span class="dot"></span>' + (state.mode === "db" ? "Data tersimpan di server" : "Data tersimpan di browser");
+    $("count").textContent = state.q.trim() ? (arr.length + " dari " + total + " link") : (total + " link tersedia");
+    $("where").innerHTML = '<span class="dot"></span>Daftar publik';
   }
 
   /* ---------- form ---------- */
@@ -698,8 +623,8 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
   function resetForm() {
     state.editId = null;
     $("form").reset();
-    $("form-title").textContent = "Tambah link";
-    $("submit").textContent = "Simpan link";
+    $("form-title").textContent = "Tambah APK";
+    $("submit").textContent = "Simpan APK";
     $("cancel").hidden = true;
     setErr("");
   }
@@ -714,35 +639,34 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
   $("form").addEventListener("submit", async function (e) {
     e.preventDefault();
     if (!isAdminLoggedIn) { toast("Akses Ditolak!"); return; }
-    
+
     var p = parseMF($("url").value);
     var name = $("name").value.trim();
     if (!p) { setErr("Masukkan link MediaFire APK yang benar."); $("url").focus(); return; }
     if (!name) { setErr("Isi nama APK supaya mudah ditemukan lewat pencarian."); $("name").focus(); return; }
     setErr("");
-    var existing = state.editId ? state.links.find(function (l) { return l.id === state.editId; }) : null;
-    var item = {
-      id: existing ? existing.id : newId(),
-      name: name,
-      url: p.href,
-      note: $("note").value.trim(),
-      createdAt: existing && existing.createdAt ? existing.createdAt : Date.now()
-    };
+    var payload = { name: name, url: p.href, note: $("note").value.trim() };
+    var editing = state.editId;
     var btn = $("submit");
     btn.disabled = true;
     try {
-      await persist(item);
-      toast(existing ? "Perubahan APK disimpan" : "APK disimpan");
+      await mutate(editing ? "Ubah APK: " + name : "Tambah APK: " + name, function (list) {
+        if (editing) {
+          var it = list.find(function (l) { return l.id === editing; });
+          if (it) { it.name = payload.name; it.url = payload.url; it.note = payload.note; return; }
+        }
+        list.unshift({ id: newId(), name: payload.name, url: payload.url, note: payload.note, createdAt: Date.now() });
+      });
+      toast("Tersimpan di GitHub. Tampil untuk publik dalam ±1 menit.");
       resetForm();
     } catch (err) {
-      setErr("Gagal menyimpan. Coba lagi beberapa saat.");
+      if (!handleAuthError(err)) setErr(err.message || "Gagal menyimpan. Coba lagi beberapa saat.");
     } finally {
       btn.disabled = false;
     }
   });
 
   $("cancel").addEventListener("click", function () { resetForm(); render(); });
-
   $("q").addEventListener("input", function (e) { state.q = e.target.value; render(); });
   $("sort").addEventListener("change", function (e) { state.sort = e.target.value; render(); });
 
@@ -770,13 +694,13 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     var act = b.getAttribute("data-act");
     var id = b.getAttribute("data-id");
     var item = id ? state.links.find(function (l) { return l.id === id; }) : null;
-    
+
     if (act === "copy" && item) { copyText(item.url); }
     else if (act === "edit" && item) {
       if (!isAdminLoggedIn) return toast("Akses Ditolak!");
       state.editId = id; state.confirmId = null;
       $("url").value = item.url || ""; $("name").value = item.name || ""; $("note").value = item.note || "";
-      $("form-title").textContent = "Ubah link";
+      $("form-title").textContent = "Ubah APK";
       $("submit").textContent = "Simpan perubahan";
       $("cancel").hidden = false;
       setErr("");
@@ -784,22 +708,32 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
       $("form").scrollIntoView({ behavior: "smooth", block: "center" });
       $("name").focus({ preventScroll: true });
     }
-    else if (act === "del") { 
+    else if (act === "del") {
       if (!isAdminLoggedIn) return toast("Akses Ditolak!");
-      state.confirmId = id; render(); 
+      state.confirmId = id; render();
     }
     else if (act === "del-no") { state.confirmId = null; render(); }
     else if (act === "del-yes" && item) {
       if (!isAdminLoggedIn) return toast("Akses Ditolak!");
       state.confirmId = null;
       try {
-        await removeItem(id);
+        await mutate("Hapus APK: " + (item.name || id), function (list) {
+          for (var i = list.length - 1; i >= 0; i--) if (list[i].id === id) list.splice(i, 1);
+        });
         if (state.editId === id) resetForm();
-        toast("APK dihapus");
-      } catch (err) { toast("Gagal menghapus. Coba lagi."); render(); }
+        toast("APK dihapus. Hilang dari publik dalam ±1 menit.");
+      } catch (err) {
+        if (!handleAuthError(err)) { toast("Gagal menghapus: " + err.message); render(); }
+      }
     }
   });
 
+  /* ---------- mulai ---------- */
+  async function boot() {
+    render();
+    await loadLinks();
+    if (readCfg()) adminLogin(true);   // lanjut sebagai admin bila token tersimpan
+  }
   boot();
 })();
 </script>
