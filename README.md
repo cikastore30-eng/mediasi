@@ -1,72 +1,42 @@
-# MediaFire APK Center — Firebase Edition (tanpa Pterodactyl)
+# MediaFire APK Center (GitHub Pages)
 
-Versi statis untuk GitHub Pages + Firebase Authentication + Cloud Firestore. Pengunjung bisa melihat daftar link publik tanpa login; hanya akun admin yang emailnya ditentukan dalam konfigurasi dan Firestore Rules yang dapat menambah, mengubah, atau menghapus posting.
+Admin tambah link lewat web -> tersimpan ke repo GitHub -> tampil untuk publik. Tanpa edit kode.
 
-## File penting
-- `index.html` — halaman website (gunakan file ini di GitHub Pages).
-- `firebase-config.js` — konfigurasi Firebase Web App dan email admin.
-- `firestore.rules` — aturan keamanan database.
-- `public/` — salinan aset halaman jika ingin tetap memakai struktur folder lama.
+## 1. Pasang di GitHub
+1. Buat repo PUBLIC baru di GitHub (contoh: mediasi).
+2. Upload `index.html` dan `links.json` ke root repo.
+3. Repo -> Settings -> Pages -> Source: "Deploy from a branch" -> Branch: main, folder: / (root) -> Save.
+4. Tunggu 1-2 menit. Web aktif di https://mediaas.site.web.id/
 
-## Bagian A — Buat proyek Firebase
-1. Buka https://console.firebase.google.com/ dan pilih **Create a project / Tambahkan project**.
-2. Setelah proyek jadi, buka **Project settings** (ikon roda gigi) → **General** → **Your apps** → ikon web `</>`.
-3. Daftarkan aplikasi web. Salin nilai konfigurasi yang ditampilkan Firebase.
-4. Di folder website, buka `firebase-config.js`. Ganti nilai `GANTI_...` dengan nilai dari Firebase. Jangan mengubah nama properti.
-5. Ganti `GANTI_DENGAN_EMAIL_ADMIN` dengan email yang akan dipakai login. Email harus sama persis dengan email di Firestore Rules.
+## 2. Buat token admin (sekali saja)
+GitHub -> foto profil -> Settings -> Developer settings -> Personal access tokens
+-> Fine-grained tokens -> Generate new token
+- Repository access: Only select repositories -> pilih repo mediasi
+- Permissions -> Repository permissions -> Contents: Read and write
+- Generate, lalu salin token (github_pat_...). Simpan di tempat aman.
 
-Contoh bentuk konfigurasi (gunakan nilai milik proyekmu, bukan contoh ini):
-```js
-export const firebaseConfig = {
-  apiKey: "nilai-dari-firebase",
-  authDomain: "nama-proyek.firebaseapp.com",
-  projectId: "nama-proyek",
-  storageBucket: "nama-proyek.firebasestorage.app",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
-};
-export const adminEmail = "email-admin-kamu@example.com";
-```
+## 3. Setup admin (sekali saja, langsung dari web)
+Buka web -> klik "Admin" -> ikuti petunjuk:
+1. Tempel token GitHub tadi.
+2. Buat password admin (minimal 12 karakter, panjang dan unik).
+Web otomatis menyimpan token TERENKRIPSI ke file database.json di repo. Tidak perlu upload manual.
 
-## Bagian B — Aktifkan login admin
-1. Firebase Console → **Authentication** → **Get started**.
-2. **Sign-in method** → aktifkan **Email/Password** → Save.
-3. Tab **Users** → **Add user**. Buat akun dengan email admin yang sama seperti di `firebase-config.js` dan password kuat.
-4. Login website menggunakan email dan password akun ini. Tombol Admin akan meminta email dan password.
-5. Untuk mengganti password, buka Authentication → Users → pilih akun → reset password sesuai opsi yang tersedia.
+## 4. Pakai sehari-hari
+Klik "Admin" -> masukkan PASSWORD (bukan token) -> isi link MediaFire -> Simpan.
+Publik melihat link baru dalam +-1 menit.
+Tombol "Ganti Password Admin" ada di panel admin.
+Jika token kedaluwarsa, web akan menawarkan token baru saat login.
 
-## Bagian C — Buat database dan aturan keamanan
-1. Firebase Console → **Firestore Database** → **Create database**.
-2. Pilih lokasi database yang sesuai. Untuk setup awal boleh mulai dalam production mode.
-3. Buka tab **Rules**. Salin isi file `firestore.rules` ke editor Rules.
-4. Di file Rules, ganti `GANTI_DENGAN_EMAIL_ADMIN` dengan email admin yang sama, lalu tekan **Publish**.
-5. Aturan ini mengizinkan publik membaca daftar, tetapi hanya akun dengan email admin yang ditentukan yang dapat menulis. Jangan mengganti aturan menjadi `allow write: if true`.
+PENTING: database.json bisa dibuka siapa saja (repo public). Isinya token yang dienkripsi,
+jadi KEKUATAN password = keamanan repo kamu. Pakai password panjang dan unik,
+jangan password yang pernah dipakai di tempat lain.
 
-## Bagian D — Upload ke GitHub Pages
-1. Buat repository GitHub baru. Untuk website publik, repository boleh Public.
-2. Upload `index.html`, `firebase-config.js`, dan `public/` (opsional untuk salinan aset). Pastikan `index.html` ada di root repository.
-3. Repository → **Settings** → **Pages** → pilih **Deploy from a branch**, pilih branch `main` dan folder `/ (root)`, lalu Save.
-4. Tunggu deployment selesai. Buka URL Pages yang diberikan GitHub dan uji daftar publik serta login admin.
-
-## Bagian E — Hubungkan domain `mediaas.site.web.id`
-1. GitHub repository → Settings → Pages → **Custom domain**, masukkan `mediaas.site.web.id`, lalu Save.
-2. Pada DNS provider yang mengelola zona `site.web.id`, buat record **CNAME**: Name/Host `mediaas`, Target `<USERNAME-GITHUB>.github.io` (ganti dengan username GitHub yang benar). Gunakan DNS only saat awal konfigurasi jika memakai Cloudflare.
-3. Setelah DNS terdeteksi GitHub, aktifkan **Enforce HTTPS** pada Settings → Pages. Propagasi DNS/sertifikat dapat memerlukan waktu.
-4. Jangan mengarahkan domain ke IP Pterodactyl untuk versi ini karena website di-host di GitHub Pages.
-
-## Cara menambahkan link MediaFire
-1. Buka website publik.
-2. Tekan tombol **🔒 Admin**.
-3. Masukkan email admin dan password akun Firebase Authentication.
-4. Isi **Link MediaFire APK**, **Nama APK**, dan **Catatan/Keterangan**.
-5. Tekan **Simpan APK**. Postingan akan tersimpan di Firestore dan tampil untuk semua pengunjung.
-6. Saat login admin, tombol **Ubah** dan **Hapus** tersedia di kartu posting.
-7. Tekan **Keluar Admin** setelah selesai.
-
-## Catatan keamanan dan batasan
-- File `firebase-config.js` berisi konfigurasi publik Firebase, bukan password. Jangan pernah memasukkan password admin ke file website.
-- Keamanan penulisan dilakukan oleh Firestore Rules. Pastikan email di Rules cocok dengan akun admin.
-- `database.json` tidak digunakan dalam versi Firebase; Firestore adalah database online permanen.
-- Website statis tidak memerlukan Node.js atau Pterodactyl.
-- Firebase memiliki kuota/ketentuan paket; pantau penggunaan di Firebase Console.
-- Bagikan hanya link APK yang berhak kamu distribusikan dan aman untuk pengguna.
+## 5. SEO (agar mudah ditemukan)
+1. Ganti `https://GANTI-USERNAME.github.io/apk-center/` dengan alamat web kamu di 3 file:
+   `index.html`, `robots.txt`, `sitemap.xml` (pakai Find & Replace).
+2. Upload semua file ke repo: index.html, links.json, robots.txt, sitemap.xml, og-image.png.
+3. Daftarkan di Google Search Console (search.google.com/search-console):
+   tambah properti URL prefix -> verifikasi (pilih "HTML tag", tempel meta tag ke <head> index.html)
+   -> menu Sitemaps -> isi `sitemap.xml` -> Submit. Lalu "URL Inspection" -> "Request indexing".
+4. Lakukan hal yang sama di Bing Webmaster Tools (bing.com/webmasters).
+5. Bagikan link web di sosial media/grup agar ada backlink.

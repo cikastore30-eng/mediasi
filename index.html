@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com">
 <title>MediaFire APK Center - Download APK Android via MediaFire</title>
 <meta name="description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#1763e0">
 <meta name="application-name" content="MediaFire APK Center">
-
+<link rel="canonical" href="https://mediaas.site.web.id/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231763e0'/%3E%3Ctext x='32' y='41' font-size='24' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EAPK%3C/text%3E%3C/svg%3E">
 <!-- Open Graph (WhatsApp, Facebook, Telegram) -->
 <meta property="og:type" content="website">
@@ -17,8 +17,8 @@
 <meta property="og:locale" content="id_ID">
 <meta property="og:title" content="MediaFire APK Center - Download APK Android via MediaFire">
 <meta property="og:description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
-
-
+<meta property="og:url" content="https://mediaas.site.web.id/">
+<meta property="og:image" content="https://mediaas.site.web.id/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="MediaFire APK Center">
@@ -26,9 +26,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MediaFire APK Center - Download APK Android via MediaFire">
 <meta name="twitter:description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
-
+<meta name="twitter:image" content="https://mediaas.site.web.id/og-image.png">
 <!-- Data terstruktur -->
-
+<script type="application/ld+json" id="ld-site">{"@context": "https://schema.org", "@type": "WebSite", "name": "MediaFire APK Center", "url": "https://mediaas.site.web.id/", "description": "Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.", "inLanguage": "id"}</script>
 <script type="application/ld+json" id="ld-list"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -349,174 +349,582 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
 </footer>
 <div class="toast" id="toast" role="status"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { firebaseConfig, adminEmail } from "./firebase-config.js";
-
+<script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var state = { links: [], ready: false, failed: false, q: "", sort: "new", editId: null, confirmId: null };
   var isAdminLoggedIn = false;
-  var app, auth, db, firebaseReady = false;
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
+
   function parseMF(raw) {
-    var s = String(raw || "").trim(); if (!s) return null;
+    var s = String(raw || "").trim();
+    if (!s) return null;
     if (!/^https?:\/\//i.test(s)) s = "https://" + s;
-    var u; try { u = new URL(s); } catch (e) { return null; }
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
     var h = u.hostname.toLowerCase();
-    var ok = h === "mediafire.com" || h.endsWith(".mediafire.com") || h === "mfi.re";
-    if (!ok || u.protocol !== "https:") return null;
-    var parts = u.pathname.split("/").filter(Boolean), kind = "Berkas", id = "", file = "";
+    var ok = h === "mediafire.com" || h.slice(-14) === ".mediafire.com" || h === "mfi.re";
+    if (!ok) return null;
+    var parts = u.pathname.split("/").filter(Boolean);
+    var kind = "Berkas", id = "", file = "";
     if (parts[0] === "folder") { kind = "Folder"; id = parts[1] || ""; file = parts[2] || ""; }
-    else if (["file", "file_premium", "view", "download"].includes(parts[0])) { id = parts[1] || ""; file = parts[2] || ""; if (file === "file") file = ""; }
-    else if (h === "mfi.re") { kind = "Tautan pendek"; id = parts[0] || ""; }
+    else if (parts[0] === "file" || parts[0] === "file_premium" || parts[0] === "view" || parts[0] === "download") {
+      id = parts[1] || ""; file = parts[2] || "";
+      if (file === "file") file = "";
+    } else if (h === "mfi.re") { kind = "Tautan pendek"; id = parts[0] || ""; }
     try { file = decodeURIComponent(file); } catch (e) {}
     var ext = file.indexOf(".") > 0 ? file.split(".").pop().slice(0, 4).toUpperCase() : (kind === "Folder" ? "DIR" : "LINK");
     return { href: u.href, kind: kind, id: id, file: file, ext: ext };
   }
+
   function toast(msg) {
-    var t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t);
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
     toast._t = setTimeout(function () { t.classList.remove("show"); }, 2800);
   }
-  function initFirebase() {
-    if (!firebaseConfig || !firebaseConfig.apiKey || String(firebaseConfig.apiKey).includes("GANTI_")) throw new Error("Konfigurasi Firebase belum diisi. Ikuti README.");
-    if (!adminEmail || String(adminEmail).includes("GANTI_")) throw new Error("Email admin belum diisi di firebase-config.js.");
-    app = initializeApp(firebaseConfig); auth = getAuth(app); db = getFirestore(app); firebaseReady = true;
+
+  /* ---------- GitHub sebagai penyimpanan ----------
+     Publik  : membaca links.json dari situs ini (GitHub Pages).
+     Admin   : menulis links.json ke repo lewat GitHub API memakai token admin.
+     Token disimpan terenkripsi (AES-256) di database.json dan hanya bisa dibuka dengan password admin. */
+  var CFG_KEY = "mf_gh_cfg";
+  var LINKS_PATH = "links.json";
+  var GH = { owner: "", repo: "", branch: "main", token: "", sha: "" };
+
+  function utf8ToB64(str) { return btoa(unescape(encodeURIComponent(str))); }
+  function b64ToUtf8(b64) { return decodeURIComponent(escape(atob(String(b64).replace(/\s/g, "")))); }
+  function newId() {
+    try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
-  async function loadLinks() {
-    state.ready = false; state.failed = false; render();
+  function readCfg() {
+    try { var raw = sessionStorage.getItem(CFG_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+  function writeCfg(cfg) {
+    try { sessionStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch (e) {}
+  }
+  function clearCfg() {
+    try { sessionStorage.removeItem(CFG_KEY); localStorage.removeItem(CFG_KEY); } catch (e) {}
+  }
+  // repo GitHub tempat data disimpan (dipakai bila web dibuka lewat domain sendiri)
+  var DEFAULT_REPO = { owner: "cikastore30-eng", repo: "mediasi" };
+  function detectRepo() {
+    var h = location.hostname, parts = location.pathname.split("/").filter(Boolean);
+    if (/\.github\.io$/i.test(h)) {
+      var owner = h.split(".")[0];
+      var repo = (parts[0] && !/\.html?$/i.test(parts[0])) ? parts[0] : owner + ".github.io";
+      return { owner: owner, repo: repo };
+    }
+    return DEFAULT_REPO;
+  }
+
+  async function ghFetch(path, opt) {
+    opt = opt || {};
+    var headers = {
+      "Accept": "application/vnd.github+json",
+      "Authorization": "Bearer " + GH.token,
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+    if (opt.body) headers["Content-Type"] = "application/json";
+    var r = await fetch("https://api.github.com" + path, { method: opt.method || "GET", headers: headers, body: opt.body, cache: "no-store" });
+    var data = null;
+    try { data = await r.json(); } catch (e) {}
+    if (!r.ok) {
+      var err = new Error(r.status === 401 ? "Token salah atau sudah kedaluwarsa."
+        : r.status === 403 ? "Token tidak punya izin (atau batas GitHub tercapai)."
+        : r.status === 404 ? "Repo/file tidak ditemukan atau token tidak punya akses ke repo ini."
+        : (data && data.message) || ("GitHub error " + r.status));
+      err.status = r.status;
+      throw err;
+    }
+    return data;
+  }
+
+  function contentsPath() {
+    return "/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo) + "/contents/" + LINKS_PATH;
+  }
+  function parseLinksJSON(text) {
+    var j = JSON.parse(text);
+    return Array.isArray(j) ? j : (Array.isArray(j.links) ? j.links : []);
+  }
+
+  // ambil versi terbaru dari GitHub (admin) beserta sha untuk commit berikutnya
+  async function pullAdmin() {
     try {
-      if (!firebaseReady) throw new Error("Firebase belum dikonfigurasi.");
-      var snap = await getDocs(collection(db, "links"));
-      state.links = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
-      state.failed = false;
-    } catch (e) { state.links = []; state.failed = true; console.error(e); }
-    state.ready = true; render();
+      var d = await ghFetch(contentsPath() + "?ref=" + encodeURIComponent(GH.branch));
+      GH.sha = d.sha;
+      state.links = parseLinksJSON(b64ToUtf8(d.content));
+    } catch (e) {
+      if (e.status === 404) { GH.sha = ""; state.links = []; }   // file belum ada -> akan dibuat
+      else throw e;
+    }
   }
+  async function pushAdmin(message) {
+    var body = {
+      message: message,
+      content: utf8ToB64(JSON.stringify({ links: state.links }, null, 2) + "\n"),
+      branch: GH.branch
+    };
+    if (GH.sha) body.sha = GH.sha;
+    var res = await ghFetch(contentsPath(), { method: "PUT", body: JSON.stringify(body) });
+    GH.sha = res.content.sha;
+  }
+  // selalu tarik data terbaru dulu supaya tidak menimpa perubahan lain
   async function mutate(message, fn) {
-    if (!auth.currentUser || auth.currentUser.email !== adminEmail) throw new Error("Akun ini bukan admin.");
-    var before = state.links.map(function (x) { return Object.assign({}, x); });
-    var copy = JSON.parse(JSON.stringify(state.links)); fn(copy);
-    var beforeIds = new Set(before.map(function (x) { return x.id; }));
-    var afterIds = new Set(copy.map(function (x) { return x.id; }));
-    var batch = writeBatch(db);
-    copy.forEach(function (item) {
-      var data = { name: item.name || "", url: item.url || "", note: item.note || "", createdAt: item.createdAt || Date.now() };
-      batch.set(doc(db, "links", item.id), data);
-    });
-    before.forEach(function (item) { if (!afterIds.has(item.id)) batch.delete(doc(db, "links", item.id)); });
-    await batch.commit(); state.links = copy; render();
+    await pullAdmin();
+    fn(state.links);
+    await pushAdmin(message);
+    render();
   }
+
+  // daftar publik: dibaca dari links.json di situs ini
+  async function loadLinks() {
+    try {
+      var r = await fetch(LINKS_PATH + "?v=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) throw new Error(r.status);
+      state.links = parseLinksJSON(await r.text());
+      state.failed = false;
+    } catch (e) { state.failed = true; }
+    state.ready = true;
+    render();
+    updateLD();
+  }
+
+  // data terstruktur: daftar APK untuk mesin pencari (dipasang saat daftar publik termuat)
+  function updateLD() {
+    try {
+      var node = document.getElementById("ld-list");
+      if (!node) return;
+      var items = state.links.slice(0, 100).map(function (l, i) {
+        return { "@type": "ListItem", position: i + 1, name: l.name || "APK", url: l.url };
+      });
+      node.textContent = JSON.stringify({
+        "@context": "https://schema.org", "@type": "ItemList",
+        name: "Daftar APK MediaFire", numberOfItems: items.length, itemListElement: items
+      });
+    } catch (e) {}
+  }
+
+  /* ---------- enkripsi token (password -> AES-256-GCM) ---------- */
+  var DB_PATH = "database.json";
+  var KDF_ITER = 600000;
+  var LOCK_KEY = "mf_admin_lock";
+  var sessionPass = "";
+
+  function bytesToB64(buf) {
+    var a = new Uint8Array(buf), s = "";
+    for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]);
+    return btoa(s);
+  }
+  function b64ToBytes(b64) {
+    var s = atob(b64), a = new Uint8Array(s.length);
+    for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i);
+    return a;
+  }
+  async function deriveKey(pass, saltB64, iter) {
+    var km = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey(
+      { name: "PBKDF2", hash: "SHA-256", salt: b64ToBytes(saltB64), iterations: iter },
+      km, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  }
+  async function encryptToken(pass, token, owner, repo) {
+    var salt = crypto.getRandomValues(new Uint8Array(16));
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    var saltB64 = bytesToB64(salt);
+    var key = await deriveKey(pass, saltB64, KDF_ITER);
+    var ct = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv: iv, additionalData: new TextEncoder().encode(owner + "/" + repo) },
+      key, new TextEncoder().encode(token));
+    return {
+      version: 1, owner: owner, repo: repo,
+      kdf: { algorithm: "PBKDF2-SHA256", iterations: KDF_ITER, salt: saltB64 },
+      enc: { algorithm: "AES-256-GCM", iv: bytesToB64(iv), data: bytesToB64(ct) }
+    };
+  }
+  async function decryptToken(pass, db) {
+    var key = await deriveKey(pass, db.kdf.salt, db.kdf.iterations);
+    var pt = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: b64ToBytes(db.enc.iv), additionalData: new TextEncoder().encode(db.owner + "/" + db.repo) },
+      key, b64ToBytes(db.enc.data));
+    return new TextDecoder().decode(pt);
+  }
+  async function fetchDb() {
+    try {
+      var r = await fetch(DB_PATH + "?v=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) return null;
+      var j = await r.json();
+      return (j && j.enc && j.kdf && j.owner && j.repo) ? j : null;
+    } catch (e) { return null; }
+  }
+  async function putFile(path, text, message) {
+    var base = "/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo) + "/contents/" + path;
+    var sha;
+    try { sha = (await ghFetch(base + "?ref=" + encodeURIComponent(GH.branch))).sha; }
+    catch (e) { if (e.status !== 404) throw e; }
+    var body = { message: message, content: utf8ToB64(text), branch: GH.branch };
+    if (sha) body.sha = sha;
+    await ghFetch(base, { method: "PUT", body: JSON.stringify(body) });
+  }
+  function getLock() {
+    try { return JSON.parse(localStorage.getItem(LOCK_KEY)) || { fails: 0, until: 0 }; } catch (e) { return { fails: 0, until: 0 }; }
+  }
+  function setLock(o) { try { localStorage.setItem(LOCK_KEY, JSON.stringify(o)); } catch (e) {} }
+
+  /* ---------- admin ---------- */
   function setAdminUI(on) {
     isAdminLoggedIn = on;
     $("adminPanel").classList.toggle("hidden-admin", !on);
+    $("publicListArea").style.gridColumn = on ? "auto" : "1 / -1";
     $("adminToggle").classList.toggle("active", on);
     $("adminToggle").textContent = on ? "🔓 Keluar Admin" : "🔒 Admin";
+    if (!on) { state.confirmId = null; resetForm(); }
     render();
   }
-  window.toggleAdminMode = async function () {
-    if (!firebaseReady) return toast("Firebase belum dikonfigurasi. Baca README.");
-    if (isAdminLoggedIn) { try { await signOut(auth); resetForm(); toast("Berhasil keluar dari Admin."); } catch(e) { toast("Gagal keluar: " + e.message); } return; }
-    var email = prompt("Email admin Firebase:"); if (email === null || !email.trim()) return;
-    var password = prompt("Password akun admin Firebase:"); if (password === null || !password) return;
+
+  async function adminLogin(silent) {
+    // 1) lanjutkan sesi tab yang masih aktif (mis. habis refresh)
+    var cfg = readCfg();
+    if (cfg && cfg.token) {
+      await enterAdmin(cfg.owner, cfg.repo, cfg.token, silent, true);
+      return;
+    }
+    if (silent) return;
+
+    // 2) login dengan password -> buka token terenkripsi di database.json
+    var db = await fetchDb();
+    if (!db) { await setupAdmin(); return; }
+
+    var lock = getLock();
+    if (lock.until > Date.now()) {
+      toast("Terlalu banyak percobaan. Coba lagi " + Math.ceil((lock.until - Date.now()) / 1000) + " detik lagi.");
+      return;
+    }
+    var pass = prompt("Masukkan Password Admin:");
+    if (pass === null) return;
+    var token;
+    try { token = await decryptToken(pass, db); }
+    catch (e) {
+      lock.fails = (lock.fails || 0) + 1;
+      if (lock.fails >= 5) { lock = { fails: 0, until: Date.now() + 300000 }; toast("❌ Password salah. Dikunci 5 menit."); }
+      else toast("❌ Password salah! Sisa percobaan: " + (5 - lock.fails));
+      setLock(lock);
+      return;
+    }
+    setLock({ fails: 0, until: 0 });
+    sessionPass = pass;
+    await enterAdmin(db.owner, db.repo, token, false, false, db);
+  }
+
+  async function enterAdmin(owner, repo, token, silent, fromSession, db) {
+    GH.owner = owner; GH.repo = repo; GH.token = token;
     try {
-      var result = await signInWithEmailAndPassword(auth, email.trim(), password);
-      if (!result.user.email || result.user.email.toLowerCase() !== adminEmail.toLowerCase()) { await signOut(auth); throw new Error("Email ini bukan email admin yang diizinkan."); }
-      setAdminUI(true); toast("Login Admin berhasil.");
-    } catch (e) { setAdminUI(false); toast("Login gagal. Periksa email dan password Firebase."); console.error(e); }
+      var info = await ghFetch("/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo));
+      if (!info.permissions || !info.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
+      GH.branch = info.default_branch || "main";
+      await pullAdmin();
+    } catch (e) {
+      GH.token = "";
+      if (e.status === 401) {
+        clearCfg();
+        if (!silent && !fromSession && sessionPass && confirm("Token GitHub sudah kedaluwarsa.\n\nGanti dengan token baru sekarang?")) {
+          await replaceToken(owner, repo);
+          return;
+        }
+        if (!silent) toast("❌ " + e.message);
+        return;
+      }
+      if (!silent) toast("❌ " + e.message);
+      return;
+    }
+    writeCfg({ owner: owner, repo: repo, token: token });
+    setAdminUI(true);
+    if (!silent) toast("Selamat datang, Admin!");
+  }
+
+  // token kedaluwarsa: simpan token baru, dienkripsi dengan password yang sama
+  async function replaceToken(owner, repo) {
+    var t = prompt("Tempel GitHub Token BARU (github_pat_...):");
+    if (!t) return;
+    GH.owner = owner; GH.repo = repo; GH.token = t.trim();
+    try {
+      var info = await ghFetch("/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo));
+      if (!info.permissions || !info.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
+      GH.branch = info.default_branch || "main";
+      var db = await encryptToken(sessionPass, GH.token, owner, repo);
+      await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Perbarui token admin");
+    } catch (e) { GH.token = ""; toast("❌ " + e.message); return; }
+    await enterAdmin(owner, repo, GH.token, false, false);
+  }
+
+  // pertama kali: buat password admin (token dienkripsi, disimpan ke database.json di repo)
+  async function setupAdmin() {
+    var info = detectRepo();
+    if (!info) {
+      var rp = prompt("Nama repo GitHub kamu (format: username/nama-repo):");
+      if (!rp || rp.indexOf("/") < 1) return;
+      var x = rp.trim().split("/");
+      info = { owner: x[0], repo: x[1] };
+    }
+    if (!confirm("Admin belum disetel.\n\nAtur password admin sekarang? Kamu butuh GitHub Token (lihat README).")) return;
+    var token = prompt("Tempel GitHub Token (github_pat_...):");
+    if (!token) return;
+    GH.owner = info.owner; GH.repo = info.repo; GH.token = token.trim();
+    try {
+      var repo = await ghFetch("/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo));
+      if (!repo.permissions || !repo.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
+      GH.branch = repo.default_branch || "main";
+    } catch (e) { GH.token = ""; toast("❌ " + e.message); return; }
+
+    var p1 = prompt("Buat password admin (minimal 12 karakter, panjang dan unik):");
+    if (p1 === null) { GH.token = ""; return; }
+    if (p1.length < 12) { GH.token = ""; toast("Password minimal 12 karakter."); return; }
+    var p2 = prompt("Ulangi password admin:");
+    if (p2 !== p1) { GH.token = ""; toast("Password tidak sama."); return; }
+    try {
+      var db = await encryptToken(p1, GH.token, GH.owner, GH.repo);
+      await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Setup admin");
+    } catch (e) { GH.token = ""; toast("❌ " + e.message); return; }
+    sessionPass = p1;
+    await enterAdmin(GH.owner, GH.repo, GH.token, false, false);
+    toast("Admin siap. Mulai sekarang masuk cukup pakai password.");
+  }
+
+  window.toggleAdminMode = async function () {
+    if (isAdminLoggedIn) {
+      clearCfg();
+      GH.token = ""; GH.sha = ""; sessionPass = "";
+      setAdminUI(false);
+      await loadLinks();
+      toast("Keluar dari mode Admin.");
+      return;
+    }
+    await adminLogin(false);
   };
-  window.changeAdminPassword = function () { toast("Ganti password melalui Firebase Console → Authentication → Users."); };
+
+  window.changeAdminPassword = async function () {
+    if (!isAdminLoggedIn || !GH.token) return;
+    var p1 = prompt("Password baru (minimal 12 karakter):");
+    if (p1 === null) return;
+    if (p1.length < 12) { toast("Password minimal 12 karakter."); return; }
+    var p2 = prompt("Ulangi password baru:");
+    if (p2 !== p1) { toast("Password tidak sama."); return; }
+    try {
+      var db = await encryptToken(p1, GH.token, GH.owner, GH.repo);
+      await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Ganti password admin");
+      sessionPass = p1;
+      toast("Password diganti. Berlaku dalam ±1 menit.");
+    } catch (e) { if (!handleAuthError(e)) toast("❌ " + e.message); }
+  };
+
   function handleAuthError(err) {
-    if (err && (err.code === "permission-denied" || err.code === "unauthenticated")) { setAdminUI(false); toast("Akses ditolak. Login admin kembali."); return true; }
+    if (err && err.status === 401) {
+      clearCfg(); GH.token = "";
+      setAdminUI(false);
+      toast("Token GitHub tidak berlaku lagi. Klik Admin untuk memperbaruinya.");
+      return true;
+    }
     return false;
   }
 
   /* ---------- tampilan ---------- */
   function visible() {
     var q = state.q.trim().toLowerCase();
-    var arr = state.links.filter(function (l) { return !q || ((l.name || "") + " " + (l.url || "") + " " + (l.note || "")).toLowerCase().indexOf(q) >= 0; });
-    arr.sort(function (a, b) { if (state.sort === "az") return String(a.name || "").localeCompare(String(b.name || ""), "id"); var d = (b.createdAt || 0) - (a.createdAt || 0); return state.sort === "old" ? -d : d; });
+    var arr = state.links.filter(function (l) {
+      if (!q) return true;
+      return ((l.name || "") + " " + (l.url || "") + " " + (l.note || "")).toLowerCase().indexOf(q) >= 0;
+    });
+    arr.sort(function (a, b) {
+      if (state.sort === "az") return String(a.name || "").localeCompare(String(b.name || ""), "id");
+      var d = (b.createdAt || 0) - (a.createdAt || 0);
+      return state.sort === "old" ? -d : d;
+    });
     return arr;
   }
+
   var ICON = {
     open: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>',
     copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
     edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
     del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
   };
+
   function cardHTML(l) {
-    var p = parseMF(l.url), href = p ? p.href : "";
+    var p = parseMF(l.url);
+    var href = p ? p.href : "";
     var date = l.createdAt ? new Date(l.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : "";
     var sub = p ? (p.kind + (p.id ? " · " + p.id : "")) : "Link tidak valid";
-    var adminButtons = isAdminLoggedIn ? '<button type="button" data-act="edit" data-id="' + esc(l.id) + '" aria-label="Ubah ' + esc(l.name) + '">' + ICON.edit + 'Ubah</button><button type="button" class="danger" data-act="del" data-id="' + esc(l.id) + '" aria-label="Hapus ' + esc(l.name) + '">' + ICON.del + '</button>' : '';
     var actions;
-    if (state.confirmId === l.id) actions = '<div class="confirm"><span>Hapus link ini?</span><button type="button" class="yes" data-act="del-yes" data-id="' + esc(l.id) + '">Ya, hapus</button><button type="button" class="ghost" data-act="del-no">Batal</button></div>';
-    else actions = '<div class="acts">' + (href ? '<a class="btn open" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + ICON.open + 'Unduh</a>' : '') + '<button type="button" data-act="copy" data-id="' + esc(l.id) + '">' + ICON.copy + 'Salin</button>' + adminButtons + '</div>';
-    return '<article class="card' + (state.editId === l.id ? ' editing' : '') + '"><div class="head"><div class="ext" aria-hidden="true">' + esc(p ? p.ext : '?') + '</div><div class="title"><h3>' + esc(l.name || 'Tanpa nama') + '</h3><p class="sub">' + esc(sub) + '</p></div></div><p class="url" title="' + esc(l.url) + '">' + esc(l.url) + '</p>' + (l.note ? '<p class="note">' + esc(l.note) + '</p>' : '') + '<div class="foot"><span class="date">' + esc(date) + '</span>' + actions + '</div></article>';
+
+    var adminButtons = isAdminLoggedIn ?
+      '<button type="button" data-act="edit" data-id="' + esc(l.id) + '" aria-label="Ubah ' + esc(l.name) + '">' + ICON.edit + 'Ubah</button>' +
+      '<button type="button" class="danger" data-act="del" data-id="' + esc(l.id) + '" aria-label="Hapus ' + esc(l.name) + '">' + ICON.del + '</button>'
+      : '';
+
+    if (state.confirmId === l.id) {
+      actions = '<div class="confirm"><span>Hapus link ini?</span>' +
+        '<button type="button" class="yes" data-act="del-yes" data-id="' + esc(l.id) + '">Ya, hapus</button>' +
+        '<button type="button" class="ghost" data-act="del-no">Batal</button></div>';
+    } else {
+      actions = '<div class="acts">' +
+        (href ? '<a class="btn open" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + ICON.open + 'Unduh</a>' : '') +
+        '<button type="button" data-act="copy" data-id="' + esc(l.id) + '">' + ICON.copy + 'Salin</button>' +
+        adminButtons +
+        '</div>';
+    }
+    return '<article class="card' + (state.editId === l.id ? ' editing' : '') + '">' +
+      '<div class="head"><div class="ext" aria-hidden="true">' + esc(p ? p.ext : "?") + '</div>' +
+      '<div class="title"><h3>' + esc(l.name || "Tanpa nama") + '</h3><p class="sub">' + esc(sub) + '</p></div></div>' +
+      '<p class="url" title="' + esc(l.url) + '">' + esc(l.url) + '</p>' +
+      (l.note ? '<p class="note">' + esc(l.note) + '</p>' : '') +
+      '<div class="foot"><span class="date">' + esc(date) + '</span>' + actions + '</div>' +
+      '</article>';
   }
+
   function render() {
-    var list = $("list"), total = state.links.length;
-    if (!state.ready) { list.innerHTML = '<div class="empty"><strong>Memuat daftar…</strong><p>Daftar APK MediaFire akan muncul di sini.</p></div>'; $("count").textContent = ""; $("where").innerHTML = ""; return; }
+    var list = $("list");
+    var total = state.links.length;
+    if (!state.ready) {
+      list.innerHTML = '<div class="empty"><strong>Memuat daftar…</strong><p>Daftar APK MediaFire akan muncul di sini.</p></div>';
+      $("count").textContent = "";
+      $("where").innerHTML = "";
+      return;
+    }
     var arr = visible();
-    if (state.failed && !total) list.innerHTML = '<div class="empty"><strong>Gagal memuat daftar</strong><p>Periksa konfigurasi Firebase, aturan Firestore, lalu muat ulang halaman.</p></div>';
-    else if (!total) list.innerHTML = '<div class="empty"><strong>Belum ada APK</strong><p>Admin belum menambahkan link MediaFire.</p></div>';
-    else if (!arr.length) list.innerHTML = '<div class="empty"><strong>Tidak ada yang cocok</strong><p>Coba kata kunci lain, atau hapus isi kolom pencarian.</p></div>';
-    else list.innerHTML = arr.map(cardHTML).join("");
+    if (state.failed && !total) {
+      list.innerHTML = '<div class="empty"><strong>Gagal memuat daftar</strong><p>Periksa koneksi lalu muat ulang halaman.</p></div>';
+    } else if (!total) {
+      list.innerHTML = '<div class="empty"><strong>Belum ada APK</strong><p>Admin belum menambahkan link MediaFire.</p></div>';
+    } else if (!arr.length) {
+      list.innerHTML = '<div class="empty"><strong>Tidak ada yang cocok</strong><p>Coba kata kunci lain, atau hapus isi kolom pencarian.</p></div>';
+    } else {
+      list.innerHTML = arr.map(cardHTML).join("");
+    }
     $("count").textContent = state.q.trim() ? (arr.length + " dari " + total + " link") : (total + " link tersedia");
     $("where").innerHTML = '<span class="dot"></span>Daftar publik';
   }
+
+  /* ---------- form ---------- */
   function setErr(m) { $("err").textContent = m || ""; }
-  function resetForm() { state.editId = null; $("form").reset(); $("form-title").textContent = "Tambah APK"; $("submit").textContent = "Simpan APK"; $("cancel").hidden = true; setErr(""); }
-  $("url").addEventListener("blur", function () { var p = parseMF($("url").value); if (p && p.file && !$("name").value.trim()) $("name").value = p.file.replace(/\.[^.]+$/, "").replace(/[_]+/g, " ").slice(0, 120); });
+  function resetForm() {
+    state.editId = null;
+    $("form").reset();
+    $("form-title").textContent = "Tambah APK";
+    $("submit").textContent = "Simpan APK";
+    $("cancel").hidden = true;
+    setErr("");
+  }
+
+  $("url").addEventListener("blur", function () {
+    var p = parseMF($("url").value);
+    if (p && p.file && !$("name").value.trim()) {
+      $("name").value = p.file.replace(/\.[^.]+$/, "").replace(/[_]+/g, " ").slice(0, 120);
+    }
+  });
+
   $("form").addEventListener("submit", async function (e) {
-    e.preventDefault(); if (!isAdminLoggedIn) { toast("Akses ditolak!"); return; }
-    var p = parseMF($("url").value), name = $("name").value.trim();
-    if (!p) { setErr("Masukkan link HTTPS MediaFire yang benar."); $("url").focus(); return; }
+    e.preventDefault();
+    if (!isAdminLoggedIn) { toast("Akses Ditolak!"); return; }
+
+    var p = parseMF($("url").value);
+    var name = $("name").value.trim();
+    if (!p) { setErr("Masukkan link MediaFire APK yang benar."); $("url").focus(); return; }
     if (!name) { setErr("Isi nama APK supaya mudah ditemukan lewat pencarian."); $("name").focus(); return; }
-    setErr(""); var payload = { name: name, url: p.href, note: $("note").value.trim() }, editing = state.editId, btn = $("submit"); btn.disabled = true;
+    setErr("");
+    var payload = { name: name, url: p.href, note: $("note").value.trim() };
+    var editing = state.editId;
+    var btn = $("submit");
+    btn.disabled = true;
     try {
       await mutate(editing ? "Ubah APK: " + name : "Tambah APK: " + name, function (list) {
-        if (editing) { var it = list.find(function (l) { return l.id === editing; }); if (it) { it.name = payload.name; it.url = payload.url; it.note = payload.note; return; } }
-        list.unshift({ id: (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)), name: payload.name, url: payload.url, note: payload.note, createdAt: Date.now() });
+        if (editing) {
+          var it = list.find(function (l) { return l.id === editing; });
+          if (it) { it.name = payload.name; it.url = payload.url; it.note = payload.note; return; }
+        }
+        list.unshift({ id: newId(), name: payload.name, url: payload.url, note: payload.note, createdAt: Date.now() });
       });
-      toast("Postingan tersimpan online dan terlihat oleh publik."); resetForm();
-    } catch (err) { if (!handleAuthError(err)) setErr(err.message || "Gagal menyimpan. Periksa aturan Firestore."); }
-    finally { btn.disabled = false; }
+      toast("Tersimpan di GitHub. Tampil untuk publik dalam ±1 menit.");
+      resetForm();
+    } catch (err) {
+      if (!handleAuthError(err)) setErr(err.message || "Gagal menyimpan. Coba lagi beberapa saat.");
+    } finally {
+      btn.disabled = false;
+    }
   });
+
   $("cancel").addEventListener("click", function () { resetForm(); render(); });
   $("q").addEventListener("input", function (e) { state.q = e.target.value; render(); });
   $("sort").addEventListener("change", function (e) { state.sort = e.target.value; render(); });
+
   function copyText(text) {
-    function fallback() { try { var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); var ok = document.execCommand("copy"); document.body.removeChild(ta); return ok; } catch (e) { return false; } }
+    function fallback() {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = text; ta.setAttribute("readonly", "");
+        ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        var ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      } catch (e) { return false; }
+    }
     var done = function (ok) { toast(ok ? "Link disalin" : "Tidak bisa menyalin otomatis. Tekan lama link lalu salin."); };
-    try { navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallback()); }); } catch (e) { done(fallback()); }
+    try {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallback()); });
+    } catch (e) { done(fallback()); }
   }
+
   $("list").addEventListener("click", async function (e) {
-    var b = e.target.closest("[data-act]"); if (!b) return;
-    var act = b.getAttribute("data-act"), id = b.getAttribute("data-id"), item = id ? state.links.find(function (l) { return l.id === id; }) : null;
-    if (act === "copy" && item) copyText(item.url);
+    var b = e.target.closest("[data-act]");
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    var id = b.getAttribute("data-id");
+    var item = id ? state.links.find(function (l) { return l.id === id; }) : null;
+
+    if (act === "copy" && item) { copyText(item.url); }
     else if (act === "edit" && item) {
-      if (!isAdminLoggedIn) return toast("Akses ditolak!"); state.editId = id; state.confirmId = null;
-      $("url").value = item.url || ""; $("name").value = item.name || ""; $("note").value = item.note || ""; $("form-title").textContent = "Ubah APK"; $("submit").textContent = "Simpan perubahan"; $("cancel").hidden = false; setErr(""); render(); $("form").scrollIntoView({ behavior: "smooth", block: "center" }); $("name").focus({ preventScroll: true });
-    } else if (act === "del") { if (!isAdminLoggedIn) return toast("Akses ditolak!"); state.confirmId = id; render(); }
+      if (!isAdminLoggedIn) return toast("Akses Ditolak!");
+      state.editId = id; state.confirmId = null;
+      $("url").value = item.url || ""; $("name").value = item.name || ""; $("note").value = item.note || "";
+      $("form-title").textContent = "Ubah APK";
+      $("submit").textContent = "Simpan perubahan";
+      $("cancel").hidden = false;
+      setErr("");
+      render();
+      $("form").scrollIntoView({ behavior: "smooth", block: "center" });
+      $("name").focus({ preventScroll: true });
+    }
+    else if (act === "del") {
+      if (!isAdminLoggedIn) return toast("Akses Ditolak!");
+      state.confirmId = id; render();
+    }
     else if (act === "del-no") { state.confirmId = null; render(); }
     else if (act === "del-yes" && item) {
-      if (!isAdminLoggedIn) return toast("Akses ditolak!"); state.confirmId = null;
-      try { await deleteDoc(doc(db, "links", id)); state.links = state.links.filter(function (l) { return l.id !== id; }); if (state.editId === id) resetForm(); render(); toast("APK dihapus dari daftar publik."); }
-      catch (err) { if (!handleAuthError(err)) { toast("Gagal menghapus. Periksa aturan Firestore."); console.error(err); render(); } }
+      if (!isAdminLoggedIn) return toast("Akses Ditolak!");
+      state.confirmId = null;
+      try {
+        await mutate("Hapus APK: " + (item.name || id), function (list) {
+          for (var i = list.length - 1; i >= 0; i--) if (list[i].id === id) list.splice(i, 1);
+        });
+        if (state.editId === id) resetForm();
+        toast("APK dihapus. Hilang dari publik dalam ±1 menit.");
+      } catch (err) {
+        if (!handleAuthError(err)) { toast("Gagal menghapus: " + err.message); render(); }
+      }
     }
   });
+
+  /* ---------- mulai ---------- */
   async function boot() {
     render();
-    try { initFirebase(); await loadLinks(); onAuthStateChanged(auth, function (user) { var ok = !!(user && user.email && user.email.toLowerCase() === adminEmail.toLowerCase()); setAdminUI(ok); }); }
-    catch (e) { console.error(e); state.failed = true; state.ready = true; render(); toast(e.message); }
+    await loadLinks();
+    if (readCfg()) adminLogin(true);   // lanjut sebagai admin bila token tersimpan
   }
   boot();
 })();
