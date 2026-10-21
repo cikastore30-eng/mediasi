@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MediaFire APK Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: form tetap di kolom kiri, daftar link di kanan; satu kolom di layar sempit. */
+:root {
+  --bg: #f2f5fa;
+  --surface: #ffffff;
+  --surface-2: #eaf0f8;
+  --line: #d9e1ee;
+  --fg: #0e1a2b;
+  --muted: #5a6a82;
+  --accent: #1763e0;
+  --accent-fg: #ffffff;
+  --accent-soft: #e0ebfd;
+  --danger: #c2362b;
+  --danger-soft: #fbe6e3;
+  --shadow: 0 1px 2px rgba(14, 26, 43, .06), 0 8px 24px -12px rgba(14, 26, 43, .18);
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a111e;
+    --surface: #111b2d;
+    --surface-2: #17243a;
+    --line: #243350;
+    --fg: #e8eef8;
+    --muted: #93a3bd;
+    --accent: #5ea3ff;
+    --accent-fg: #06111f;
+    --accent-soft: #15294a;
+    --danger: #ff8a7d;
+    --danger-soft: #3a1d1b;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a111e;
+  --surface: #111b2d;
+  --surface-2: #17243a;
+  --line: #243350;
+  --fg: #e8eef8;
+  --muted: #93a3bd;
+  --accent: #5ea3ff;
+  --accent-fg: #06111f;
+  --accent-soft: #15294a;
+  --danger: #ff8a7d;
+  --danger-soft: #3a1d1b;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .6);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Header */
+.top { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; position: relative;}
+.mark {
+  width: 42px; height: 42px; flex: none;
+  display: grid; place-items: center;
+  background: var(--accent); color: var(--accent-fg);
+  border-radius: 12px;
+}
+.mark svg { width: 22px; height: 22px; }
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+.tag { color: var(--muted); font-size: 13px; margin: 2px 0 0; }
+
+/* Tombol Admin Rahasia */
+.admin-toggle {
+  position: absolute; right: 0; top: 10px;
+  background: transparent; border: 1px solid var(--line);
+  color: var(--muted); padding: 6px 12px; border-radius: 8px;
+  font-size: 12px; cursor: pointer; font-weight: 600; transition: 0.2s;
+}
+.admin-toggle:hover { background: var(--surface-2); color: var(--fg); }
+.admin-toggle.active { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 820px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+/* Form & Panel */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+.panel h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  margin: 0 0 14px;
+  letter-spacing: -0.01em;
+}
+form { display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+label, .lbl {
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+input, textarea, select {
+  font: inherit; color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  width: 100%;
+  min-width: 0;
+}
+textarea { resize: vertical; min-height: 64px; }
+input.mono { font-family: var(--font-mono); font-size: 13px; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: .75; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline-offset: 0; border-color: var(--accent); }
+.err { color: var(--danger); font-size: 13px; min-height: 0; margin: 0; }
+.err:empty { display: none; }
+
+button {
+  font: inherit; font-weight: 600; cursor: pointer;
+  border-radius: 10px; border: 1px solid transparent;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
+.primary { background: var(--accent); color: var(--accent-fg); }
+.primary:hover { filter: brightness(1.08); }
+.primary:disabled { opacity: .6; cursor: progress; }
+.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.ghost:hover { background: var(--surface-2); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row > * { flex: 1 1 auto; }
+
+/* Toolbar */
+.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.search { position: relative; flex: 1 1 220px; min-width: 0; }
+.search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); pointer-events: none; }
+.search input { padding-left: 36px; background: var(--surface); }
+.toolbar select { width: auto; flex: 0 0 auto; background: var(--surface); }
+.meta { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin: 0 2px 12px; }
+.meta .where { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+/* Cards */
+.list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  min-width: 0;
+  box-shadow: var(--shadow);
+}
+.card.editing { border-color: var(--accent); }
+.head { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
+.ext {
+  flex: none; width: 46px; height: 46px; border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent);
+  font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: .02em;
+}
+.title { min-width: 0; }
+.title h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem; line-height: 1.25; margin: 0;
+  overflow-wrap: anywhere;
+}
+.sub { color: var(--muted); font-size: 12px; margin: 2px 0 0; font-family: var(--font-mono); overflow-wrap: anywhere; }
+.url {
+  font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: 7px 10px; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  user-select: all;
+}
+.note { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+.date { color: var(--muted); font-size: 12px; }
+.acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.acts button, .acts a.btn {
+  padding: 7px 10px; font-size: 13px; border-radius: 8px;
+  background: transparent; color: var(--fg); border: 1px solid var(--line);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; cursor: pointer;
+}
+.acts button:hover, .acts a.btn:hover { background: var(--surface-2); }
+.acts .open { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.acts .open:hover { background: var(--accent); filter: brightness(1.08); }
+.acts .danger { color: var(--danger); }
+.acts .danger:hover { background: var(--danger-soft); }
+.confirm { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--danger); font-weight: 600; }
+.confirm button { padding: 6px 10px; font-size: 13px; }
+.confirm .yes { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+/* Empty / loading */
+.empty {
+  grid-column: 1 / -1;
+  border: 1.5px dashed var(--line);
+  border-radius: 16px;
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty strong { display: block; color: var(--fg); font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 6px; }
+.empty p { margin: 0 auto; max-width: 40ch; }
+
+/* Toast */
+.toast {
+  position: fixed; left: 50%; transform: translate(-50%, 12px);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: var(--fg); color: var(--bg);
+  padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 500;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  max-width: calc(100% - 32px); z-index: 20;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* Sembunyikan Form Admin secara default */
+.hidden-admin { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </div>
+    <div>
+      <h1>MediaFire APK Center</h1>
+      <p class="tag">Pusat link APK MediaFire — simpan, susun, dan cari APK dengan mudah.</p>
+    </div>
+    
+    <!-- TOMBOL LOGIN ADMIN -->
+    <button class="admin-toggle" id="adminToggle" type="button" onclick="toggleAdminMode()">🔒 Admin</button>
+  </header>
+
+  <div class="layout">
+    <!-- PANEL FORM & STATISTIK (DISEMBUNYIKAN) -->
+    <section class="panel hidden-admin" id="adminPanel" aria-labelledby="form-title">
+      <h2 id="form-title">Tambah APK</h2>
+      <form id="form" novalidate>
+        <div class="field">
+          <label for="url">Link MediaFire APK</label>
+          <input id="url" class="mono" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://www.mediafire.com/file/...">
+        </div>
+        <div class="field">
+          <label for="name">Nama APK</label>
+          <input id="name" type="text" autocomplete="off" maxlength="120" placeholder="Contoh: WhatsApp Mod v1.0">
+        </div>
+        <div class="field">
+          <label for="note">Catatan (opsional)</label>
+          <textarea id="note" maxlength="500" placeholder="Versi APK, ukuran file, password, atau keterangan lain"></textarea>
+        </div>
+        <p class="err" id="err" role="alert"></p>
+        <div class="row">
+          <button class="primary" id="submit" type="submit">Simpan APK</button>
+          <button class="ghost" id="cancel" type="button" hidden>Batal</button>
+        </div>
+
+        <button class="ghost" type="button" onclick="changeAdminPassword()">🔑 Ganti Password Admin</button>
+
+        <!-- DIV UNTUK STATISTIK (HANYA MUNCUL DI PANEL ADMIN) -->
+        <div id="adminStats" style="margin-top: 20px; border-top: 1px solid var(--line); padding-top: 15px;">
+          <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--fg);">📊 Statistik Website</h3>
+          <div style="display: flex; gap: 10px;">
+            <div style="flex: 1; background: var(--surface-2); padding: 10px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 12px; color: var(--muted);">Total Dikunjungi</div>
+              <div id="visitCount" style="font-size: 20px; font-weight: bold; color: var(--accent);">0</div>
+            </div>
+            <div style="flex: 1; background: var(--surface-2); padding: 10px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 12px; color: var(--muted);">Kunjungan Hari Ini</div>
+              <div id="visitToday" style="font-size: 20px; font-weight: bold; color: var(--accent);">0</div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section aria-label="Daftar link" id="publicListArea" style="grid-column: 1 / -1;">
+      <div class="toolbar">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Cari nama APK, versi, link, atau catatan..." aria-label="Cari nama APK atau link MediaFire">
+        </div>
+        <select id="sort" aria-label="Urutkan">
+          <option value="new">Terbaru</option>
+          <option value="old">Terlama</option>
+          <option value="az">Nama A–Z</option>
+        </select>
+      </div>
+      <div class="meta">
+        <span id="count"></span>
+        <span class="where" id="where"></span>
+      </div>
+      <div class="list" id="list" aria-live="polite"></div>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var LS_KEY = "mediafire-apk-center-v1";
+
+  // ==========================================
+  // 1. AUTH ADMIN (password disimpan sbg HASH di database.json)
+  // ==========================================
+  var AUTH = null;      // { admin:{...}, security:{...} } dari database.json
+  var isAdminLoggedIn = false;
+  var LOCK_KEY = "mf_admin_lock";
+
+  var authReady = (async function () {
+    try {
+      var r = await fetch("database.json", { cache: "no-store" });
+      if (!r.ok) throw new Error(r.status);
+      var j = await r.json();
+      if (!j || !j.admin || !j.admin.hash || !j.admin.salt) throw new Error("format");
+      AUTH = j;
+    } catch (e) { AUTH = null; }
+  })();
+
+  function hexToBytes(h) {
+    var a = new Uint8Array(h.length / 2);
+    for (var i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16);
+    return a;
+  }
+  function bytesToHex(buf) {
+    return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+      return ("0" + b.toString(16)).slice(-2);
+    }).join("");
+  }
+  async function hashPassword(pass, saltHex, iter) {
+    var key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveBits"]);
+    var bits = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", hash: "SHA-256", salt: hexToBytes(saltHex), iterations: iter }, key, 256);
+    return bytesToHex(bits);
+  }
+  function safeEqual(a, b) {
+    if (a.length !== b.length) return false;
+    var r = 0;
+    for (var i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    return r === 0;
+  }
+
+  // Pembatasan percobaan salah (anti tebak-tebakan)
+  function getLock() {
+    try { return JSON.parse(localStorage.getItem(LOCK_KEY)) || { fails: 0, until: 0 }; }
+    catch (e) { return { fails: 0, until: 0 }; }
+  }
+  function setLock(o) { try { localStorage.setItem(LOCK_KEY, JSON.stringify(o)); } catch (e) {} }
+
+  function enterAdmin() {
+    isAdminLoggedIn = true;
+    $("adminPanel").classList.remove("hidden-admin");
+    $("publicListArea").style.gridColumn = "auto";
+    $("adminToggle").classList.add("active");
+    $("adminToggle").textContent = "🔓 Keluar Admin";
+    toast("Selamat datang, Admin!");
+    updateVisitorStats();
+    render();
+  }
+  function leaveAdmin() {
+    isAdminLoggedIn = false;
+    $("adminPanel").classList.add("hidden-admin");
+    $("publicListArea").style.gridColumn = "1 / -1";
+    $("adminToggle").classList.remove("active");
+    $("adminToggle").textContent = "🔒 Admin";
+    toast("Mode Admin dinonaktifkan");
+    render();
+  }
+
+  // ==========================================
+  // 2. FUNGSI LOGIN ADMIN
+  // ==========================================
+  window.toggleAdminMode = async function () {
+    if (isAdminLoggedIn) { leaveAdmin(); return; }
+
+    await authReady;
+    if (!AUTH) { toast("database.json tidak ditemukan. Buka lewat hosting/https, bukan file langsung."); return; }
+    if (!(window.crypto && crypto.subtle)) { toast("Browser butuh https atau localhost untuk login."); return; }
+
+    var sec = AUTH.security || {};
+    var maxTry = sec.maxAttempts || 5, lockSec = sec.lockoutSeconds || 300;
+    var lock = getLock();
+    if (lock.until > Date.now()) {
+      toast("Terlalu banyak percobaan. Coba lagi " + Math.ceil((lock.until - Date.now()) / 1000) + " detik lagi.");
+      return;
+    }
+
+    var pass = prompt("Masukkan Password Admin:");
+    if (pass === null) return;
+
+    var got;
+    try { got = await hashPassword(pass, AUTH.admin.salt, AUTH.admin.iterations || 210000); }
+    catch (e) { toast("Gagal memeriksa password."); return; }
+
+    if (safeEqual(got, AUTH.admin.hash)) {
+      setLock({ fails: 0, until: 0 });
+      enterAdmin();
+    } else {
+      lock.fails = (lock.fails || 0) + 1;
+      if (lock.fails >= maxTry) { lock = { fails: 0, until: Date.now() + lockSec * 1000 }; toast("❌ Password salah. Dikunci " + lockSec + " detik."); }
+      else { toast("❌ Password Salah! Sisa percobaan: " + (maxTry - lock.fails)); }
+      setLock(lock);
+    }
+  };
+
+  // Ganti password -> hasilkan database.json baru untuk diupload ulang
+  window.changeAdminPassword = async function () {
+    if (!isAdminLoggedIn || !AUTH) return;
+    var minLen = (AUTH.security && AUTH.security.minPasswordLength) || 10;
+    var p1 = prompt("Password baru (minimal " + minLen + " karakter):");
+    if (p1 === null) return;
+    if (p1.length < minLen) { toast("Password terlalu pendek."); return; }
+    var p2 = prompt("Ulangi password baru:");
+    if (p2 !== p1) { toast("Password tidak sama."); return; }
+
+    var iter = AUTH.admin.iterations || 210000;
+    var saltHex = bytesToHex(crypto.getRandomValues(new Uint8Array(16)));
+    var hash = await hashPassword(p1, saltHex, iter);
+    var next = JSON.parse(JSON.stringify(AUTH));
+    next.admin.salt = saltHex;
+    next.admin.hash = hash;
+
+    var blob = new Blob([JSON.stringify(next, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "database.json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    toast("Upload database.json baru ke hosting agar password berubah.");
+  };
+
+  // ==========================================
+  // 3. FITUR PENGHITUNG PENGUNJUNG (LOCAL STORAGE)
+  // ==========================================
+  function updateVisitorStats() {
+    try {
+      var today = new Date().toDateString();
+      
+      // Ambil data lama
+      var total = parseInt(localStorage.getItem('visit_total') || "0");
+      var todayCount = parseInt(localStorage.getItem('visit_today') || "0");
+      var lastVisitDate = localStorage.getItem('visit_date');
+
+      // Kalo ganti hari, reset hitungan hari ini
+      if (lastVisitDate !== today) {
+        todayCount = 0;
+      }
+
+      // Simpan data kunjungan baru (tambah 1)
+      total += 1;
+      todayCount += 1;
+
+      localStorage.setItem('visit_total', total);
+      localStorage.setItem('visit_today', todayCount);
+      localStorage.setItem('visit_date', today);
+
+      // Tampilkan di panel admin (kalo elemennya ada)
+      if ($("visitCount")) $("visitCount").textContent = total;
+      if ($("visitToday")) $("visitToday").textContent = todayCount;
+      
+    } catch (e) {
+      console.log("Gagal update statistik", e);
+    }
+  }
+
+  // ==========================================
+  // 4. DATA DEFAULT APK (Bisa Ditambah Manual)
+  // ==========================================
+  var DEFAULT_APKS = [
+    {
+      id: "apk-contoh-001",
+      name: "CIKA V2I",
+      url: "https://www.mediafire.com/file/cgcp1y3zxj5oi9k/CIKA_STORE_V2.apk/file",
+      note: "Isi keterangan atau versi APK di sini",
+      createdAt: 1792540800000
+    }
+  ];
+
+  var state = { links: [], ready: false, mode: null, q: "", sort: "new", editId: null, confirmId: null };
+  var db = null;
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function parseMF(raw) {
+    var s = String(raw || "").trim();
+    if (!s) return null;
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
+    var h = u.hostname.toLowerCase();
+    var ok = h === "mediafire.com" || h.slice(-14) === ".mediafire.com" || h === "mfi.re";
+    if (!ok) return null;
+    var parts = u.pathname.split("/").filter(Boolean);
+    var kind = "Berkas", id = "", file = "";
+    if (parts[0] === "folder") { kind = "Folder"; id = parts[1] || ""; file = parts[2] || ""; }
+    else if (parts[0] === "file" || parts[0] === "file_premium" || parts[0] === "view" || parts[0] === "download") {
+      id = parts[1] || ""; file = parts[2] || "";
+      if (file === "file") file = "";
+    } else if (h === "mfi.re") { kind = "Tautan pendek"; id = parts[0] || ""; }
+    try { file = decodeURIComponent(file); } catch (e) {}
+    var ext = file.indexOf(".") > 0 ? file.split(".").pop().slice(0, 4).toUpperCase() : (kind === "Folder" ? "DIR" : "LINK");
+    return { href: u.href, kind: kind, id: id, file: file, ext: ext };
+  }
+
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2400);
+  }
+
+  function newId() {
+    try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  /* ---------- penyimpanan ---------- */
+  function loadLocal() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : DEFAULT_APKS.slice();
+    } catch (e) { return []; }
+  }
+  function saveLocal() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(state.links)); return true; } catch (e) { return false; }
+  }
+  function useLocal() {
+    state.mode = "local";
+    state.links = loadLocal();
+    state.ready = true;
+    render();
+  }
+
+  async function persist(item) {
+    if (state.mode === "db") {
+      await db.collection("links").doc(item.id).set({
+        name: item.name, url: item.url, note: item.note, createdAt: item.createdAt
+      });
+    } else {
+      var i = state.links.findIndex(function (l) { return l.id === item.id; });
+      if (i >= 0) state.links[i] = item; else state.links.unshift(item);
+      if (!saveLocal()) throw new Error("local");
+      render();
+    }
+  }
+  async function removeItem(id) {
+    if (state.mode === "db") {
+      await db.collection("links").doc(id).delete();
+    } else {
+      state.links = state.links.filter(function (l) { return l.id !== id; });
+      saveLocal();
+      render();
+    }
+  }
+
+  async function boot() {
+    // Panggil fungsi update statistik pas web pertama kali dibuka
+    updateVisitorStats();
+    
+    render();
+    try { db = (window.claude && window.claude.use) ? await window.claude.use("db") : null; } catch (e) { db = null; }
+    if (!db) { useLocal(); return; }
+    state.mode = "db";
+    try {
+      db.collection("links").onSnapshot(function (snap) {
+        state.links = snap.docs.map(function (d) {
+          var o = d.data() || {};
+          return { id: d.id, name: o.name, url: o.url, note: o.note, createdAt: o.createdAt };
+        });
+        state.ready = true;
+        render();
+      }, function () { db = null; useLocal(); });
+    } catch (e) { db = null; useLocal(); }
+  }
+
+  /* ---------- tampilan ---------- */
+  function visible() {
+    var q = state.q.trim().toLowerCase();
+    var arr = state.links.filter(function (l) {
+      if (!q) return true;
+      return ((l.name || "") + " " + (l.url || "") + " " + (l.note || "")).toLowerCase().indexOf(q) >= 0;
+    });
+    arr.sort(function (a, b) {
+      if (state.sort === "az") return String(a.name || "").localeCompare(String(b.name || ""), "id");
+      var d = (b.createdAt || 0) - (a.createdAt || 0);
+      return state.sort === "old" ? -d : d;
+    });
+    return arr;
+  }
+
+  var ICON = {
+    open: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>',
+    copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+  };
+
+  function cardHTML(l) {
+    var p = parseMF(l.url);
+    var href = p ? p.href : "";
+    var date = l.createdAt ? new Date(l.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : "";
+    var sub = p ? (p.kind + (p.id ? " · " + p.id : "")) : "Link tidak valid";
+    var actions;
+    
+    // TOMBOL EDIT & HAPUS HANYA MUNCUL KALO ADMIN
+    var adminButtons = isAdminLoggedIn ? 
+      '<button type="button" data-act="edit" data-id="' + esc(l.id) + '" aria-label="Ubah ' + esc(l.name) + '">' + ICON.edit + 'Ubah</button>' +
+      '<button type="button" class="danger" data-act="del" data-id="' + esc(l.id) + '" aria-label="Hapus ' + esc(l.name) + '">' + ICON.del + '</button>' 
+      : '';
+
+    if (state.confirmId === l.id) {
+      actions = '<div class="confirm"><span>Hapus link ini?</span>' +
+        '<button type="button" class="yes" data-act="del-yes" data-id="' + esc(l.id) + '">Ya, hapus</button>' +
+        '<button type="button" class="ghost" data-act="del-no">Batal</button></div>';
+    } else {
+      actions = '<div class="acts">' +
+        (href ? '<a class="btn open" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + ICON.open + 'Buka</a>' : '') +
+        '<button type="button" data-act="copy" data-id="' + esc(l.id) + '">' + ICON.copy + 'Salin</button>' +
+        adminButtons +
+        '</div>';
+    }
+    return '<article class="card' + (state.editId === l.id ? ' editing' : '') + '">' +
+      '<div class="head"><div class="ext" aria-hidden="true">' + esc(p ? p.ext : "?") + '</div>' +
+      '<div class="title"><h3>' + esc(l.name || "Tanpa nama") + '</h3><p class="sub">' + esc(sub) + '</p></div></div>' +
+      '<p class="url" title="' + esc(l.url) + '">' + esc(l.url) + '</p>' +
+      (l.note ? '<p class="note">' + esc(l.note) + '</p>' : '') +
+      '<div class="foot"><span class="date">' + esc(date) + '</span>' + actions + '</div>' +
+      '</article>';
+  }
+
+  function render() {
+    var list = $("list");
+    var total = state.links.length;
+    if (!state.ready) {
+      list.innerHTML = '<div class="empty"><strong>Memuat daftar…</strong><p>Daftar APK MediaFire akan muncul di sini.</p></div>';
+      $("count").textContent = "";
+      $("where").innerHTML = "";
+      return;
+    }
+    var arr = visible();
+    if (!total) {
+      list.innerHTML = '<div class="empty"><strong>Belum ada APK</strong><p>Admin belum menambahkan link MediaFire.</p></div>';
+    } else if (!arr.length) {
+      list.innerHTML = '<div class="empty"><strong>Tidak ada yang cocok</strong><p>Coba kata kunci lain, atau hapus isi kolom pencarian.</p></div>';
+    } else {
+      list.innerHTML = arr.map(cardHTML).join("");
+    }
+    $("count").textContent = state.q.trim() ? (arr.length + " dari " + total + " link") : (total + " link tersimpan");
+    $("where").innerHTML = '<span class="dot"></span>' + (state.mode === "db" ? "Data tersimpan di server" : "Data tersimpan di browser");
+  }
+
+  /* ---------- form ---------- */
+  function setErr(m) { $("err").textContent = m || ""; }
+  function resetForm() {
+    state.editId = null;
+    $("form").reset();
+    $("form-title").textContent = "Tambah link";
+    $("submit").textContent = "Simpan link";
+    $("cancel").hidden = true;
+    setErr("");
+  }
+
+  $("url").addEventListener("blur", function () {
+    var p = parseMF($("url").value);
+    if (p && p.file && !$("name").value.trim()) {
+      $("name").value = p.file.replace(/\.[^.]+$/, "").replace(/[_]+/g, " ").slice(0, 120);
+    }
+  });
+
+  $("form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (!isAdminLoggedIn) { toast("Akses Ditolak!"); return; }
+    
+    var p = parseMF($("url").value);
+    var name = $("name").value.trim();
+    if (!p) { setErr("Masukkan link MediaFire APK yang benar."); $("url").focus(); return; }
+    if (!name) { setErr("Isi nama APK supaya mudah ditemukan lewat pencarian."); $("name").focus(); return; }
+    setErr("");
+    var existing = state.editId ? state.links.find(function (l) { return l.id === state.editId; }) : null;
+    var item = {
+      id: existing ? existing.id : newId(),
+      name: name,
+      url: p.href,
+      note: $("note").value.trim(),
+      createdAt: existing && existing.createdAt ? existing.createdAt : Date.now()
+    };
+    var btn = $("submit");
+    btn.disabled = true;
+    try {
+      await persist(item);
+      toast(existing ? "Perubahan APK disimpan" : "APK disimpan");
+      resetForm();
+    } catch (err) {
+      setErr("Gagal menyimpan. Coba lagi beberapa saat.");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  $("cancel").addEventListener("click", function () { resetForm(); render(); });
+
+  $("q").addEventListener("input", function (e) { state.q = e.target.value; render(); });
+  $("sort").addEventListener("change", function (e) { state.sort = e.target.value; render(); });
+
+  function copyText(text) {
+    function fallback() {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = text; ta.setAttribute("readonly", "");
+        ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        var ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      } catch (e) { return false; }
+    }
+    var done = function (ok) { toast(ok ? "Link disalin" : "Tidak bisa menyalin otomatis. Tekan lama link lalu salin."); };
+    try {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallback()); });
+    } catch (e) { done(fallback()); }
+  }
+
+  $("list").addEventListener("click", async function (e) {
+    var b = e.target.closest("[data-act]");
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    var id = b.getAttribute("data-id");
+    var item = id ? state.links.find(function (l) { return l.id === id; }) : null;
+    
+    if (act === "copy" && item) { copyText(item.url); }
+    else if (act === "edit" && item) {
+      if (!isAdminLoggedIn) return toast("Akses Ditolak!");
+      state.editId = id; state.confirmId = null;
+      $("url").value = item.url || ""; $("name").value = item.name || ""; $("note").value = item.note || "";
+      $("form-title").textContent = "Ubah link";
+      $("submit").textContent = "Simpan perubahan";
+      $("cancel").hidden = false;
+      setErr("");
+      render();
+      $("form").scrollIntoView({ behavior: "smooth", block: "center" });
+      $("name").focus({ preventScroll: true });
+    }
+    else if (act === "del") { 
+      if (!isAdminLoggedIn) return toast("Akses Ditolak!");
+      state.confirmId = id; render(); 
+    }
+    else if (act === "del-no") { state.confirmId = null; render(); }
+    else if (act === "del-yes" && item) {
+      if (!isAdminLoggedIn) return toast("Akses Ditolak!");
+      state.confirmId = null;
+      try {
+        await removeItem(id);
+        if (state.editId === id) resetForm();
+        toast("APK dihapus");
+      } catch (err) { toast("Gagal menghapus. Coba lagi."); render(); }
+    }
+  });
+
+  boot();
+})();
+</script>
+</body>
+</html>
