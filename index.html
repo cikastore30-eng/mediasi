@@ -4,7 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com">
-<title>MediaFire APK Center</title>
+<title>MediaFire APK Center - Download APK Android via MediaFire</title>
+<meta name="description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#1763e0">
+<meta name="application-name" content="MediaFire APK Center">
+<link rel="canonical" href="https://GANTI-USERNAME.github.io/apk-center/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231763e0'/%3E%3Ctext x='32' y='41' font-size='24' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EAPK%3C/text%3E%3C/svg%3E">
+<!-- Open Graph (WhatsApp, Facebook, Telegram) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MediaFire APK Center">
+<meta property="og:locale" content="id_ID">
+<meta property="og:title" content="MediaFire APK Center - Download APK Android via MediaFire">
+<meta property="og:description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
+<meta property="og:url" content="https://GANTI-USERNAME.github.io/apk-center/">
+<meta property="og:image" content="https://GANTI-USERNAME.github.io/apk-center/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MediaFire APK Center">
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MediaFire APK Center - Download APK Android via MediaFire">
+<meta name="twitter:description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
+<meta name="twitter:image" content="https://GANTI-USERNAME.github.io/apk-center/og-image.png">
+<!-- Data terstruktur -->
+<script type="application/ld+json" id="ld-site">{"@context": "https://schema.org", "@type": "WebSite", "name": "MediaFire APK Center", "url": "https://GANTI-USERNAME.github.io/apk-center/", "description": "Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.", "inLanguage": "id"}</script>
+<script type="application/ld+json" id="ld-list"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -293,6 +318,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
           <button class="ghost" id="cancel" type="button" hidden>Batal</button>
         </div>
 
+        <button class="ghost" type="button" onclick="changeAdminPassword()">🔑 Ganti Password Admin</button>
       </form>
     </section>
 
@@ -316,6 +342,11 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     </section>
   </div>
 </div>
+<noscript><p style="padding:16px;text-align:center">Aktifkan JavaScript untuk melihat daftar APK MediaFire.</p></noscript>
+<footer class="wrap" style="padding-top:0;color:var(--muted);font-size:13px">
+  <h2 style="font-size:15px;color:var(--fg);margin:0 0 6px">Tentang MediaFire APK Center</h2>
+  <p style="margin:0;max-width:70ch">MediaFire APK Center adalah kumpulan link download APK Android yang disimpan di MediaFire. Gunakan kolom pencarian untuk menemukan nama aplikasi atau versi tertentu, lalu klik Unduh untuk membuka file di MediaFire atau Salin untuk membagikan link-nya. Daftar diperbarui oleh admin secara berkala.</p>
+</footer>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -362,7 +393,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
   /* ---------- GitHub sebagai penyimpanan ----------
      Publik  : membaca links.json dari situs ini (GitHub Pages).
      Admin   : menulis links.json ke repo lewat GitHub API memakai token admin.
-     Token hanya ada di browser admin, tidak pernah ditaruh di kode/repo. */
+     Token disimpan terenkripsi (AES-256) di database.json dan hanya bisa dibuka dengan password admin. */
   var CFG_KEY = "mf_gh_cfg";
   var LINKS_PATH = "links.json";
   var GH = { owner: "", repo: "", branch: "main", token: "", sha: "" };
@@ -374,16 +405,10 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
   function readCfg() {
-    try {
-      var raw = sessionStorage.getItem(CFG_KEY) || localStorage.getItem(CFG_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) { return null; }
+    try { var raw = sessionStorage.getItem(CFG_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
   }
-  function writeCfg(cfg, remember) {
-    try {
-      sessionStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-      if (remember) localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-    } catch (e) {}
+  function writeCfg(cfg) {
+    try { sessionStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch (e) {}
   }
   function clearCfg() {
     try { sessionStorage.removeItem(CFG_KEY); localStorage.removeItem(CFG_KEY); } catch (e) {}
@@ -467,7 +492,88 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     } catch (e) { state.failed = true; }
     state.ready = true;
     render();
+    updateLD();
   }
+
+  // data terstruktur: daftar APK untuk mesin pencari (dipasang saat daftar publik termuat)
+  function updateLD() {
+    try {
+      var node = document.getElementById("ld-list");
+      if (!node) return;
+      var items = state.links.slice(0, 100).map(function (l, i) {
+        return { "@type": "ListItem", position: i + 1, name: l.name || "APK", url: l.url };
+      });
+      node.textContent = JSON.stringify({
+        "@context": "https://schema.org", "@type": "ItemList",
+        name: "Daftar APK MediaFire", numberOfItems: items.length, itemListElement: items
+      });
+    } catch (e) {}
+  }
+
+  /* ---------- enkripsi token (password -> AES-256-GCM) ---------- */
+  var DB_PATH = "database.json";
+  var KDF_ITER = 600000;
+  var LOCK_KEY = "mf_admin_lock";
+  var sessionPass = "";
+
+  function bytesToB64(buf) {
+    var a = new Uint8Array(buf), s = "";
+    for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]);
+    return btoa(s);
+  }
+  function b64ToBytes(b64) {
+    var s = atob(b64), a = new Uint8Array(s.length);
+    for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i);
+    return a;
+  }
+  async function deriveKey(pass, saltB64, iter) {
+    var km = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey(
+      { name: "PBKDF2", hash: "SHA-256", salt: b64ToBytes(saltB64), iterations: iter },
+      km, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  }
+  async function encryptToken(pass, token, owner, repo) {
+    var salt = crypto.getRandomValues(new Uint8Array(16));
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    var saltB64 = bytesToB64(salt);
+    var key = await deriveKey(pass, saltB64, KDF_ITER);
+    var ct = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv: iv, additionalData: new TextEncoder().encode(owner + "/" + repo) },
+      key, new TextEncoder().encode(token));
+    return {
+      version: 1, owner: owner, repo: repo,
+      kdf: { algorithm: "PBKDF2-SHA256", iterations: KDF_ITER, salt: saltB64 },
+      enc: { algorithm: "AES-256-GCM", iv: bytesToB64(iv), data: bytesToB64(ct) }
+    };
+  }
+  async function decryptToken(pass, db) {
+    var key = await deriveKey(pass, db.kdf.salt, db.kdf.iterations);
+    var pt = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: b64ToBytes(db.enc.iv), additionalData: new TextEncoder().encode(db.owner + "/" + db.repo) },
+      key, b64ToBytes(db.enc.data));
+    return new TextDecoder().decode(pt);
+  }
+  async function fetchDb() {
+    try {
+      var r = await fetch(DB_PATH + "?v=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) return null;
+      var j = await r.json();
+      return (j && j.enc && j.kdf && j.owner && j.repo) ? j : null;
+    } catch (e) { return null; }
+  }
+  async function putFile(path, text, message) {
+    var base = "/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo) + "/contents/" + path;
+    var sha;
+    try { sha = (await ghFetch(base + "?ref=" + encodeURIComponent(GH.branch))).sha; }
+    catch (e) { if (e.status !== 404) throw e; }
+    var body = { message: message, content: utf8ToB64(text), branch: GH.branch };
+    if (sha) body.sha = sha;
+    await ghFetch(base, { method: "PUT", body: JSON.stringify(body) });
+  }
+  function getLock() {
+    try { return JSON.parse(localStorage.getItem(LOCK_KEY)) || { fails: 0, until: 0 }; } catch (e) { return { fails: 0, until: 0 }; }
+  }
+  function setLock(o) { try { localStorage.setItem(LOCK_KEY, JSON.stringify(o)); } catch (e) {} }
 
   /* ---------- admin ---------- */
   function setAdminUI(on) {
@@ -481,61 +587,145 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
   }
 
   async function adminLogin(silent) {
+    // 1) lanjutkan sesi tab yang masih aktif (mis. habis refresh)
     var cfg = readCfg();
-    var info = (cfg && cfg.owner) ? { owner: cfg.owner, repo: cfg.repo } : detectRepo();
+    if (cfg && cfg.token) {
+      await enterAdmin(cfg.owner, cfg.repo, cfg.token, silent, true);
+      return;
+    }
+    if (silent) return;
+
+    // 2) login dengan password -> buka token terenkripsi di database.json
+    var db = await fetchDb();
+    if (!db) { await setupAdmin(); return; }
+
+    var lock = getLock();
+    if (lock.until > Date.now()) {
+      toast("Terlalu banyak percobaan. Coba lagi " + Math.ceil((lock.until - Date.now()) / 1000) + " detik lagi.");
+      return;
+    }
+    var pass = prompt("Masukkan Password Admin:");
+    if (pass === null) return;
+    var token;
+    try { token = await decryptToken(pass, db); }
+    catch (e) {
+      lock.fails = (lock.fails || 0) + 1;
+      if (lock.fails >= 5) { lock = { fails: 0, until: Date.now() + 300000 }; toast("❌ Password salah. Dikunci 5 menit."); }
+      else toast("❌ Password salah! Sisa percobaan: " + (5 - lock.fails));
+      setLock(lock);
+      return;
+    }
+    setLock({ fails: 0, until: 0 });
+    sessionPass = pass;
+    await enterAdmin(db.owner, db.repo, token, false, false, db);
+  }
+
+  async function enterAdmin(owner, repo, token, silent, fromSession, db) {
+    GH.owner = owner; GH.repo = repo; GH.token = token;
+    try {
+      var info = await ghFetch("/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo));
+      if (!info.permissions || !info.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
+      GH.branch = info.default_branch || "main";
+      await pullAdmin();
+    } catch (e) {
+      GH.token = "";
+      if (e.status === 401) {
+        clearCfg();
+        if (!silent && !fromSession && sessionPass && confirm("Token GitHub sudah kedaluwarsa.\n\nGanti dengan token baru sekarang?")) {
+          await replaceToken(owner, repo);
+          return;
+        }
+        if (!silent) toast("❌ " + e.message);
+        return;
+      }
+      if (!silent) toast("❌ " + e.message);
+      return;
+    }
+    writeCfg({ owner: owner, repo: repo, token: token });
+    setAdminUI(true);
+    if (!silent) toast("Selamat datang, Admin!");
+  }
+
+  // token kedaluwarsa: simpan token baru, dienkripsi dengan password yang sama
+  async function replaceToken(owner, repo) {
+    var t = prompt("Tempel GitHub Token BARU (github_pat_...):");
+    if (!t) return;
+    GH.owner = owner; GH.repo = repo; GH.token = t.trim();
+    try {
+      var info = await ghFetch("/repos/" + encodeURIComponent(owner) + "/" + encodeURIComponent(repo));
+      if (!info.permissions || !info.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
+      GH.branch = info.default_branch || "main";
+      var db = await encryptToken(sessionPass, GH.token, owner, repo);
+      await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Perbarui token admin");
+    } catch (e) { GH.token = ""; toast("❌ " + e.message); return; }
+    await enterAdmin(owner, repo, GH.token, false, false);
+  }
+
+  // pertama kali: buat password admin (token dienkripsi, disimpan ke database.json di repo)
+  async function setupAdmin() {
+    var info = detectRepo();
     if (!info) {
-      if (silent) return;
       var rp = prompt("Nama repo GitHub kamu (format: username/nama-repo):");
       if (!rp || rp.indexOf("/") < 1) return;
       var x = rp.trim().split("/");
       info = { owner: x[0], repo: x[1] };
     }
-    var token = cfg && cfg.token;
-    var fresh = false;
-    if (!token) {
-      if (silent) return;
-      token = prompt("Tempel GitHub Token admin (github_pat_...):");
-      if (!token) return;
-      token = token.trim();
-      fresh = true;
-    }
-    GH.owner = info.owner; GH.repo = info.repo; GH.token = token;
+    if (!confirm("Admin belum disetel.\n\nAtur password admin sekarang? Kamu butuh GitHub Token (lihat README).")) return;
+    var token = prompt("Tempel GitHub Token (github_pat_...):");
+    if (!token) return;
+    GH.owner = info.owner; GH.repo = info.repo; GH.token = token.trim();
     try {
       var repo = await ghFetch("/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo));
       if (!repo.permissions || !repo.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
       GH.branch = repo.default_branch || "main";
-      await pullAdmin();
-    } catch (e) {
-      GH.token = "";
-      if (!silent || (e.status === 401)) clearCfg();
-      if (!silent) toast("❌ " + e.message);
-      return;
-    }
-    if (fresh) {
-      var remember = confirm("Ingat token di perangkat ini?\n\nOK = tidak perlu tempel token lagi di HP/komputer ini.\nBatal = token hilang saat tab ditutup.");
-      writeCfg({ owner: GH.owner, repo: GH.repo, token: GH.token }, remember);
-    }
-    setAdminUI(true);
-    toast("Selamat datang, Admin!");
+    } catch (e) { GH.token = ""; toast("❌ " + e.message); return; }
+
+    var p1 = prompt("Buat password admin (minimal 12 karakter, panjang dan unik):");
+    if (p1 === null) { GH.token = ""; return; }
+    if (p1.length < 12) { GH.token = ""; toast("Password minimal 12 karakter."); return; }
+    var p2 = prompt("Ulangi password admin:");
+    if (p2 !== p1) { GH.token = ""; toast("Password tidak sama."); return; }
+    try {
+      var db = await encryptToken(p1, GH.token, GH.owner, GH.repo);
+      await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Setup admin");
+    } catch (e) { GH.token = ""; toast("❌ " + e.message); return; }
+    sessionPass = p1;
+    await enterAdmin(GH.owner, GH.repo, GH.token, false, false);
+    toast("Admin siap. Mulai sekarang masuk cukup pakai password.");
   }
 
   window.toggleAdminMode = async function () {
     if (isAdminLoggedIn) {
       clearCfg();
-      GH.token = ""; GH.sha = "";
+      GH.token = ""; GH.sha = ""; sessionPass = "";
       setAdminUI(false);
       await loadLinks();
-      toast("Keluar dari mode Admin. Token dihapus dari perangkat ini.");
+      toast("Keluar dari mode Admin.");
       return;
     }
     await adminLogin(false);
+  };
+
+  window.changeAdminPassword = async function () {
+    if (!isAdminLoggedIn || !GH.token) return;
+    var p1 = prompt("Password baru (minimal 12 karakter):");
+    if (p1 === null) return;
+    if (p1.length < 12) { toast("Password minimal 12 karakter."); return; }
+    var p2 = prompt("Ulangi password baru:");
+    if (p2 !== p1) { toast("Password tidak sama."); return; }
+    try {
+      var db = await encryptToken(p1, GH.token, GH.owner, GH.repo);
+      await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Ganti password admin");
+      sessionPass = p1;
+      toast("Password diganti. Berlaku dalam ±1 menit.");
+    } catch (e) { if (!handleAuthError(e)) toast("❌ " + e.message); }
   };
 
   function handleAuthError(err) {
     if (err && err.status === 401) {
       clearCfg(); GH.token = "";
       setAdminUI(false);
-      toast("Token tidak berlaku lagi. Masuk admin dengan token baru.");
+      toast("Token GitHub tidak berlaku lagi. Klik Admin untuk memperbaruinya.");
       return true;
     }
     return false;
