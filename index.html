@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="rainbow">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com https://api.counterapi.dev">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com https://api.counterapi.dev https://counterapi.dev https://hits.dwyl.com; frame-src 'none';">
 <title>MediaFire APK Center - Download APK Android via MediaFire</title>
 <meta name="description" content="Kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat di MediaFire APK Center.">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="theme-color" content="#1763e0">
+<meta name="theme-color" content="#ff5a1f">
 <meta name="application-name" content="MediaFire APK Center">
 <link rel="canonical" href="https://mediaas.site.web.id/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231763e0'/%3E%3Ctext x='32' y='41' font-size='24' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EAPK%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ff5a1f'/%3E%3Ctext x='32' y='41' font-size='24' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EAPK%3C/text%3E%3C/svg%3E">
 <!-- Open Graph (WhatsApp, Facebook, Telegram) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MediaFire APK Center">
@@ -32,264 +32,438 @@
 <script type="application/ld+json" id="ld-list"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
-/* Layout: form tetap di kolom kiri, daftar link di kanan; satu kolom di layar sempit. */
+/* ============================================================
+   MediaFire APK Center — gaya "kertas & tinta"
+   Datar, tebal, berwarna. Tanpa gradasi, tanpa efek kaca.
+   ============================================================ */
 :root {
-  --bg: #f2f5fa;
-  --surface: #ffffff;
-  --surface-2: #eaf0f8;
-  --line: #d9e1ee;
-  --fg: #0e1a2b;
-  --muted: #5a6a82;
-  --accent: #1763e0;
-  --accent-fg: #ffffff;
-  --accent-soft: #e0ebfd;
-  --danger: #c2362b;
-  --danger-soft: #fbe6e3;
-  --shadow: 0 1px 2px rgba(14, 26, 43, .06), 0 8px 24px -12px rgba(14, 26, 43, .18);
+  --paper: #f3efe6;
+  --card:  #fffdf8;
+  --fg:    #16130f;
+  --muted: #675f53;
+  --line:  #16130f;
+  --sh:    #16130f;
+  --dot:   rgba(22,19,15,.13);
+
+  --accent: #ff5a1f;
+  --accent-fg: #16130f;
+  --hl: #ffd23f;
+  --danger: #d62f1f;
+  --danger-soft: #ffe3df;
+
+  --c1: #ffd23f; --c2: #ff7a59; --c3: #6fdcae;
+  --c4: #6ec6ff; --c5: #c3a6ff; --c6: #ff9ecb;
+
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0a111e;
-    --surface: #111b2d;
-    --surface-2: #17243a;
-    --line: #243350;
-    --fg: #e8eef8;
-    --muted: #93a3bd;
-    --accent: #5ea3ff;
-    --accent-fg: #06111f;
-    --accent-soft: #15294a;
-    --danger: #ff8a7d;
-    --danger-soft: #3a1d1b;
-    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .6);
+  :root {
+    --paper: #17140f;
+    --card:  #221e18;
+    --fg:    #f4efe4;
+    --muted: #aaa292;
+    --line:  #f4efe4;
+    --sh:    #000000;
+    --dot:   rgba(244,239,228,.07);
+    --danger: #ff7a6b;
+    --danger-soft: #3a1c18;
     color-scheme: dark;
   }
 }
-:root[data-theme="dark"] {
-  --bg: #0a111e;
-  --surface: #111b2d;
-  --surface-2: #17243a;
-  --line: #243350;
-  --fg: #e8eef8;
-  --muted: #93a3bd;
-  --accent: #5ea3ff;
-  --accent-fg: #06111f;
-  --accent-soft: #15294a;
-  --danger: #ff8a7d;
-  --danger-soft: #3a1d1b;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .6);
-  color-scheme: dark;
-}
 
-* { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.5;
   margin: 0;
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  color: var(--fg);
+  font: 15px/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
+::selection { background: var(--hl); color: #16130f; }
 .wrap {
   max-width: 1080px;
   margin: 0 auto;
-  padding-block: 28px 56px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 64px;
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
 }
 
-/* Header */
-.top { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; position: relative;}
-.top-title { flex: 1 1 200px; min-width: 0; }
-.top-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
-.icon-btn { width: 34px; height: 34px; display: grid; place-items: center; background: transparent;
-  border: 1px solid var(--line); color: var(--muted); border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 16px; line-height: 1; }
-.icon-btn svg { width: 16px; height: 16px; }
-.icon-btn:hover { background: var(--surface-2); color: var(--fg); }
-.visit-stats { display: flex; gap: 10px; align-items: stretch; margin-bottom: 16px; }
-.visit-stats > div { flex: 1; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
-.visit-stats .n { display: block; font-size: 1.4rem; font-weight: 700; font-family: var(--font-display); }
-.visit-stats .l { font-size: 12px; color: var(--muted); }
-.visit-stats .icon-btn { align-self: center; }
+/* Garis warna di paling atas (mode pelangi) */
+.rainbow-bar {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 6px; z-index: 200;
+  background: linear-gradient(90deg,
+    var(--c1) 0 16.66%, var(--c2) 0 33.33%, var(--c3) 0 50%,
+    var(--c4) 0 66.66%, var(--c5) 0 83.33%, var(--c6) 0);
+}
+html.rainbow .rainbow-bar { display: block; }
+
+/* ---------- Header ---------- */
+.top {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+  padding-bottom: 18px; margin-bottom: 34px;
+  border-bottom: 2px solid var(--line);
+}
+.top-title { flex: 1 1 220px; min-width: 0; }
+.top-actions { margin-left: auto; display: flex; gap: 10px; align-items: center; }
 .mark {
-  width: 42px; height: 42px; flex: none;
+  width: 44px; height: 44px; flex: none;
   display: grid; place-items: center;
   background: var(--accent); color: var(--accent-fg);
-  border-radius: 12px;
+  border: 2px solid var(--line); border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--sh);
+  transform: rotate(-4deg);
 }
 .mark svg { width: 22px; height: 22px; }
 h1 {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin: 0;
-  text-wrap: balance;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.15rem, 3.6vw, 1.55rem);
+  line-height: 1.1; letter-spacing: -.025em; margin: 0;
 }
-.tag { color: var(--muted); font-size: 13px; margin: 2px 0 0; }
+.tag { color: var(--muted); font-size: 12.5px; margin: 3px 0 0; }
+@media (max-width: 600px) { .tag { display: none; } }
 
-/* Tombol Admin Rahasia */
-.admin-toggle {
-  background: transparent; border: 1px solid var(--line);
-  color: var(--muted); padding: 7px 12px; border-radius: 8px;
-  font-size: 12px; cursor: pointer; font-weight: 600; transition: 0.2s;
+/* ---------- Tombol ---------- */
+button {
+  font: inherit; font-weight: 700; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px;
+  background: var(--card); color: var(--fg);
+  border: 2px solid var(--line); border-radius: 10px;
+  box-shadow: 3px 3px 0 var(--sh);
+  transition: transform .12s, box-shadow .12s, background-color .12s;
 }
-.admin-toggle:hover { background: var(--surface-2); color: var(--fg); }
-.admin-toggle.active { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button:hover:not(:disabled) { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--sh); }
+button:active:not(:disabled) { transform: translate(3px,3px); box-shadow: 0 0 0 var(--sh); }
+button svg, a.btn svg { width: 15px; height: 15px; flex: none; }
+.primary { background: var(--accent); color: var(--accent-fg); }
+.primary:disabled { opacity: .6; cursor: progress; }
+.ghost { background: var(--card); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.row > * { flex: 1 1 auto; }
 
+.icon-btn { width: 42px; height: 42px; padding: 0; font-size: 16px; line-height: 1; }
+.icon-btn svg { width: 18px; height: 18px; }
+#rainbowBtn svg { width: 24px; height: 24px; }
+#rainbowBtn[aria-pressed="true"] { background: var(--hl); }
+#rainbowBtn[aria-pressed="true"] svg path { stroke: #16130f; }
+#rainbowBtn[aria-pressed="false"] svg { opacity: .55; filter: grayscale(1); }
+
+.admin-toggle { height: 42px; padding: 0 16px; font-size: 13px; white-space: nowrap; }
+.admin-toggle.active { background: var(--accent); color: var(--accent-fg); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  padding: 4px 0 30px;
+}
+.hero-text { max-width: 740px; }
+.eyebrow {
+  font: 700 12px var(--font-mono);
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 14px;
+}
+.hero-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(2.3rem, 9vw, 5.2rem);
+  line-height: .98; letter-spacing: -.045em;
+  margin: 0 0 18px;
+}
+.hero-title mark {
+  background: none; color: inherit;
+  position: relative; z-index: 0; white-space: nowrap;
+}
+.hero-title mark::before {
+  content: ""; position: absolute; z-index: -1;
+  left: -.08em; right: -.08em; bottom: .03em; height: .44em;
+  background: var(--accent);
+  transform: rotate(-1.2deg);
+}
+html.rainbow .hero-title mark::before { background: var(--hl); }
+.hero-sub {
+  max-width: 54ch; margin: 0 0 22px;
+  font-size: clamp(15px, 2.4vw, 17px); color: var(--muted);
+}
+.hero-tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-tags li {
+  padding: 6px 14px;
+  border: 2px solid var(--line); border-radius: 999px;
+  background: var(--card); color: var(--fg);
+  font-size: 12.5px; font-weight: 700;
+}
+.hero-tags li:nth-child(1) { transform: rotate(-1.6deg); }
+.hero-tags li:nth-child(2) { transform: rotate(1deg); }
+.hero-tags li:nth-child(3) { transform: rotate(-.8deg); }
+html.rainbow .hero-tags li { color: #16130f; }
+html.rainbow .hero-tags li:nth-child(1) { background: var(--c3); }
+html.rainbow .hero-tags li:nth-child(2) { background: var(--c4); }
+html.rainbow .hero-tags li:nth-child(3) { background: var(--c6); }
+
+.hero-badge {
+  flex: none; width: 112px; height: 112px; border-radius: 50%;
+  display: grid; place-content: center; text-align: center;
+  background: var(--accent); color: #16130f;
+  border: 2px solid var(--line); box-shadow: 4px 4px 0 var(--sh);
+  transform: rotate(12deg);
+}
+html.rainbow .hero-badge { background: var(--c5); }
+.hero-badge b { font: 800 30px/1 var(--font-display); letter-spacing: -.03em; }
+.hero-badge span { font: 700 11px var(--font-mono); letter-spacing: .16em; margin-top: 4px; }
+@media (max-width: 640px) { .hero-badge { display: none; } }
+
+/* ---------- Banner mengetik (gaya terminal) ---------- */
+#typing-banner {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 52px; padding: 12px 16px; margin-bottom: 34px;
+  background: #16130f; color: #f4efe4;
+  border: 2px solid var(--line); border-radius: 12px;
+  box-shadow: 4px 4px 0 var(--sh);
+  font: 500 13.5px/1.5 var(--font-mono);
+  contain: layout style;
+}
+#typing-icon {
+  flex: none; width: 24px; height: 24px; display: grid; place-items: center;
+  background: var(--hl); color: #16130f; border-radius: 6px;
+  font: 800 14px/1 var(--font-mono);
+}
+#typing-text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.typing-cursor {
+  display: inline-block; width: .55em; height: 1.1em;
+  background: var(--hl); vertical-align: -.2em; margin-left: 2px;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- Layout & panel admin ---------- */
 .layout {
-  display: grid;
+  display: grid; align-items: start; gap: 26px;
   grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
 }
 @media (max-width: 820px) { .layout { grid-template-columns: minmax(0, 1fr); } }
 
-/* Form & Panel */
 .panel {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--shadow);
-  min-width: 0;
+  min-width: 0; padding: 20px;
+  background: var(--card);
+  border: 2px solid var(--line); border-radius: 16px;
+  box-shadow: 5px 5px 0 var(--sh);
 }
 .panel h2 {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  margin: 0 0 14px;
-  letter-spacing: -0.01em;
+  font: 800 1.25rem var(--font-display);
+  letter-spacing: -.02em; margin: 0 0 16px;
 }
+.hidden-admin { display: none !important; }
+
+.visit-stats { display: flex; gap: 10px; align-items: stretch; margin-bottom: 20px; }
+.visit-stats > div {
+  flex: 1; padding: 10px 12px;
+  border: 2px solid var(--line); border-radius: 12px; color: #16130f;
+}
+.visit-stats > div:nth-child(1) { background: var(--c1); }
+.visit-stats > div:nth-child(2) { background: var(--c4); }
+.visit-stats .n { display: block; font: 800 1.7rem/1 var(--font-display); letter-spacing: -.03em; }
+.visit-stats .l { display: block; margin-top: 4px; font: 500 11px var(--font-mono); }
+.visit-stats .icon-btn { align-self: center; flex: none; }
+
 form { display: flex; flex-direction: column; gap: 14px; }
 .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 label, .lbl {
-  font-size: 12px; font-weight: 600; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .06em;
+  font: 700 11.5px var(--font-mono);
+  text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
 }
 input, textarea, select {
   font: inherit; color: var(--fg);
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px 12px;
-  width: 100%;
-  min-width: 0;
+  width: 100%; min-width: 0; padding: 11px 13px;
+  background: var(--card);
+  border: 2px solid var(--line); border-radius: 10px;
+  transition: box-shadow .12s, transform .12s;
 }
-textarea { resize: vertical; min-height: 64px; }
+textarea { resize: vertical; min-height: 70px; }
 input.mono { font-family: var(--font-mono); font-size: 13px; }
 input::placeholder, textarea::placeholder { color: var(--muted); opacity: .75; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-input:focus-visible, textarea:focus-visible, select:focus-visible { outline-offset: 0; border-color: var(--accent); }
-.err { color: var(--danger); font-size: 13px; min-height: 0; margin: 0; }
+:focus-visible { outline: none; }
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  box-shadow: 3px 3px 0 var(--accent); transform: translate(-1px,-1px);
+}
+button:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.err { color: var(--danger); font-size: 13px; font-weight: 600; margin: 0; }
 .err:empty { display: none; }
 
-button {
-  font: inherit; font-weight: 600; cursor: pointer;
-  border-radius: 10px; border: 1px solid transparent;
-  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+/* ---------- Pencarian ---------- */
+.toolbar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.search { position: relative; flex: 1 1 240px; min-width: 0; }
+.search svg {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px; color: var(--fg); pointer-events: none;
 }
-button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
-.primary { background: var(--accent); color: var(--accent-fg); }
-.primary:hover { filter: brightness(1.08); }
-.primary:disabled { opacity: .6; cursor: progress; }
-.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
-.ghost:hover { background: var(--surface-2); }
-.row { display: flex; gap: 8px; flex-wrap: wrap; }
-.row > * { flex: 1 1 auto; }
+.search input { padding: 13px 14px 13px 44px; box-shadow: 4px 4px 0 var(--sh); }
+.search input:focus-visible { box-shadow: 4px 4px 0 var(--accent); }
+.toolbar select {
+  width: auto; flex: 0 0 auto; cursor: pointer; font-weight: 700;
+  padding: 13px 14px; box-shadow: 4px 4px 0 var(--sh);
+}
+.meta {
+  display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  margin: 8px 2px 16px; color: var(--muted);
+  font: 500 12.5px var(--font-mono);
+}
+.meta .where { display: inline-flex; align-items: center; gap: 8px; }
+.dot {
+  width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+  background: #2bd96b; border: 2px solid var(--line);
+}
 
-/* Toolbar */
-.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
-.search { position: relative; flex: 1 1 220px; min-width: 0; }
-.search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); pointer-events: none; }
-.search input { padding-left: 36px; background: var(--surface); }
-.toolbar select { width: auto; flex: 0 0 auto; background: var(--surface); }
-.meta { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin: 0 2px 12px; }
-.meta .where { display: inline-flex; align-items: center; gap: 6px; }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; }
-
-/* Cards */
-.list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+/* ---------- Kartu APK ---------- */
+.list {
+  display: grid; gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
 .card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 16px;
+  --c: var(--accent);
+  position: relative; min-width: 0;
   display: flex; flex-direction: column; gap: 12px;
-  min-width: 0;
-  box-shadow: var(--shadow);
+  padding: 16px;
+  background: var(--card);
+  border: 2px solid var(--line); border-radius: 14px;
+  box-shadow: 5px 5px 0 var(--sh);
+  transition: transform .14s, box-shadow .14s;
 }
-.card.editing { border-color: var(--accent); }
+.card::before {
+  content: ""; display: block; height: 14px;
+  margin: -16px -16px 2px;
+  background: var(--c);
+  border-bottom: 2px solid var(--line);
+  border-radius: 11px 11px 0 0;
+}
+.card:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--sh); }
+.card.editing { outline: 3px dashed var(--accent); outline-offset: 4px; }
+html.rainbow .card:nth-child(6n+1) { --c: var(--c1); }
+html.rainbow .card:nth-child(6n+2) { --c: var(--c2); }
+html.rainbow .card:nth-child(6n+3) { --c: var(--c3); }
+html.rainbow .card:nth-child(6n+4) { --c: var(--c4); }
+html.rainbow .card:nth-child(6n+5) { --c: var(--c5); }
+html.rainbow .card:nth-child(6n+6) { --c: var(--c6); }
+
 .head { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
 .ext {
-  flex: none; width: 46px; height: 46px; border-radius: 10px;
-  display: grid; place-items: center;
-  background: var(--accent-soft); color: var(--accent);
-  font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: .02em;
+  flex: none; width: 50px; height: 50px; display: grid; place-items: center;
+  background: var(--c); color: #16130f;
+  border: 2px solid var(--line); border-radius: 12px;
+  box-shadow: 2px 2px 0 var(--sh);
+  font: 700 12px var(--font-mono);
 }
 .title { min-width: 0; }
 .title h3 {
-  font-family: var(--font-display);
-  font-size: 1.05rem; line-height: 1.25; margin: 0;
-  overflow-wrap: anywhere;
+  font: 800 1.08rem/1.2 var(--font-display);
+  letter-spacing: -.01em; margin: 0; overflow-wrap: anywhere;
 }
-.sub { color: var(--muted); font-size: 12px; margin: 2px 0 0; font-family: var(--font-mono); overflow-wrap: anywhere; }
+.sub { margin: 4px 0 0; color: var(--muted); font: 500 11.5px var(--font-mono); overflow-wrap: anywhere; }
 .url {
-  font-family: var(--font-mono); font-size: 12px; color: var(--muted);
-  background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
-  padding: 7px 10px; margin: 0;
+  margin: 0; padding: 8px 10px;
+  border: 2px dashed var(--muted); border-radius: 8px;
+  color: var(--muted); font: 500 12px var(--font-mono);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   user-select: all;
 }
-.note { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
-.foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: auto; }
-.date { color: var(--muted); font-size: 12px; }
-.acts { display: flex; gap: 6px; flex-wrap: wrap; }
-.acts button, .acts a.btn {
-  padding: 7px 10px; font-size: 13px; border-radius: 8px;
-  background: transparent; color: var(--fg); border: 1px solid var(--line);
-  text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; cursor: pointer;
+.note {
+  margin: 0; padding-left: 12px; font-size: 13.5px;
+  border-left: 4px solid var(--c); overflow-wrap: anywhere;
 }
-.acts button:hover, .acts a.btn:hover { background: var(--surface-2); }
-.acts .open { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-.acts .open:hover { background: var(--accent); filter: brightness(1.08); }
+.foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.date { color: var(--muted); font: 500 11.5px var(--font-mono); }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.acts button, .acts a.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 11px; font: 700 12.5px var(--font-body);
+  background: var(--card); color: var(--fg); text-decoration: none;
+  border: 2px solid var(--line); border-radius: 9px;
+  box-shadow: 2px 2px 0 var(--sh); cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+}
+.acts button:hover, .acts a.btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--sh); }
+.acts button:active, .acts a.btn:active { transform: translate(2px,2px); box-shadow: 0 0 0 var(--sh); }
+.acts .open { background: var(--c); color: #16130f; }
 .acts .danger { color: var(--danger); }
 .acts .danger:hover { background: var(--danger-soft); }
-.confirm { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--danger); font-weight: 600; }
-.confirm button { padding: 6px 10px; font-size: 13px; }
-.confirm .yes { background: var(--danger); color: #fff; border-color: var(--danger); }
+.confirm { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 700; color: var(--danger); }
+.confirm button { padding: 6px 11px; font-size: 12.5px; box-shadow: 2px 2px 0 var(--sh); }
+.confirm .yes { background: var(--danger); color: #fff; }
 
-/* Empty / loading */
 .empty {
-  grid-column: 1 / -1;
-  border: 1.5px dashed var(--line);
-  border-radius: 16px;
-  padding: 36px 20px;
-  text-align: center;
-  color: var(--muted);
+  grid-column: 1 / -1; padding: 44px 20px; text-align: center;
+  background: var(--card); color: var(--muted);
+  border: 2px dashed var(--line); border-radius: 16px;
 }
-.empty strong { display: block; color: var(--fg); font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 6px; }
+.empty strong { display: block; margin-bottom: 6px; color: var(--fg); font: 800 1.3rem var(--font-display); letter-spacing: -.02em; }
 .empty p { margin: 0 auto; max-width: 40ch; }
 
-/* Toast */
+/* ---------- Footer ---------- */
+footer.wrap { margin-top: 24px; padding-top: 24px !important; padding-bottom: 96px; border-top: 2px solid var(--line); }
+footer.wrap a { color: var(--fg) !important; font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 3px; text-underline-offset: 3px; }
+
+/* ---------- Toast ---------- */
 .toast {
-  position: fixed; left: 50%; transform: translate(-50%, 12px);
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  background: var(--fg); color: var(--bg);
-  padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 500;
-  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
-  max-width: calc(100% - 32px); z-index: 20;
+  position: fixed; left: 50%; z-index: 300;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 12px);
+  max-width: calc(100% - 36px);
+  padding: 11px 18px;
+  background: var(--fg); color: var(--paper);
+  border: 2px solid var(--line); border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--accent);
+  font-size: 13.5px; font-weight: 700;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-/* Sembunyikan Form Admin secara default */
-.hidden-admin { display: none !important; }
+/* ---------- Tombol WhatsApp (bisa digeser) ---------- */
+#wa-fab {
+  position: fixed; z-index: 9999;
+  right: 20px; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  cursor: grab; user-select: none; -webkit-user-select: none;
+  touch-action: none; will-change: transform;
+}
+#wa-fab:active { cursor: grabbing; }
+#wa-fab a {
+  position: relative; width: 60px; height: 60px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #25d366; text-decoration: none;
+  border: 2px solid var(--line); box-shadow: 4px 4px 0 var(--sh);
+}
+#wa-fab a::after {
+  content: ""; position: absolute; inset: -2px; border-radius: 50%;
+  border: 2px solid #25d366; pointer-events: none;
+  animation: wa-ping 2.6s ease-out infinite;
+}
+#wa-fab.dragging a::after { animation: none; opacity: 0; }
+@keyframes wa-ping { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.7); opacity: 0; } }
+#wa-fab svg { width: 32px; height: 32px; fill: #fff; flex: none; }
+#wa-fab .wa-tip {
+  position: absolute; right: 72px; top: 50%; transform: translateY(-50%);
+  padding: 6px 11px; border-radius: 8px;
+  background: var(--fg); color: var(--paper);
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s;
+}
+#wa-fab:hover .wa-tip { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
 </style>
 </head>
 <body>
+<div class="rainbow-bar" aria-hidden="true"></div>
 
 <div class="wrap">
   <header class="top">
@@ -303,12 +477,34 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     
     <!-- TOMBOL LOGIN ADMIN -->
     <div class="top-actions">
+      <button class="icon-btn" id="rainbowBtn" type="button" aria-label="Nyalakan atau matikan mode pelangi" aria-pressed="true" title="Mode pelangi"><svg viewBox="2 8 20 12" fill="none" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M3 19a9 9 0 0 1 18 0" stroke="#ff4d4d"/><path d="M5 19a7 7 0 0 1 14 0" stroke="#ffb020"/><path d="M7 19a5 5 0 0 1 10 0" stroke="#2bd96b"/><path d="M9 19a3 3 0 0 1 6 0" stroke="#4f6ef7"/></svg></button>
       <button class="icon-btn" id="shareBtn" type="button" onclick="shareSite()" aria-label="Bagikan link website" title="Bagikan link website">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       </button>
-      <button class="admin-toggle" id="adminToggle" type="button" onclick="toggleAdminMode()">🔒 Admin</button>
+      <button class="admin-toggle" id="adminToggle" type="button" onclick="toggleAdminMode()">Admin</button>
     </div>
   </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" aria-label="Pengantar">
+    <div class="hero-text">
+      <p class="eyebrow">Koleksi APK &middot; diperbarui berkala</p>
+      <h2 class="hero-title">APK Gratis,<br><mark>Gak Pake Ribet.</mark></h2>
+      <p class="hero-sub">Cari aplikasi yang lu mau, klik Unduh, selesai. Semua link langsung mengarah ke MediaFire.</p>
+      <ul class="hero-tags">
+        <li>Cari, klik, selesai</li>
+        <li>Link langsung MediaFire</li>
+        <li>Gratis, dilarang dijual</li>
+      </ul>
+    </div>
+    <div class="hero-badge" aria-hidden="true"><b>100%</b><span>GRATIS</span></div>
+  </section>
+
+  <!-- ===== Banner mengetik ===== -->
+  <div id="typing-banner" aria-live="polite" aria-label="Peringatan">
+    <span id="typing-icon" aria-hidden="true">!</span>
+    <span id="typing-text"></span><span class="typing-cursor" id="typing-cursor" aria-hidden="true"></span>
+  </div>
 
   <div class="layout">
     <!-- PANEL FORM & STATISTIK (DISEMBUNYIKAN) -->
@@ -338,7 +534,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
           <button class="ghost" id="cancel" type="button" hidden>Batal</button>
         </div>
 
-        <button class="ghost" type="button" onclick="changeAdminPassword()">🔑 Ganti Password Admin</button>
+        <button class="ghost" type="button" onclick="changeAdminPassword()">Ganti Password Admin</button>
       </form>
     </section>
 
@@ -369,6 +565,152 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
   <p style="margin:8px 0 0"><a href="https://mediaas.site.web.id/" style="color:var(--accent)">mediaas.site.web.id</a></p>
 </footer>
 <div class="toast" id="toast" role="status"></div>
+
+<!-- ===== Tombol WhatsApp Floating Draggable ===== -->
+<div id="wa-fab" role="complementary" aria-label="Hubungi via WhatsApp">
+  <span class="wa-tip">Chat WhatsApp</span>
+  <a href="https://wa.me/6288271102065?text=Cika%20gua%20mau%20buy%20apk%20bug"
+     target="_blank" rel="noopener noreferrer"
+     aria-label="Hubungi kami via WhatsApp"
+     id="wa-link">
+    <!-- Logo WhatsApp resmi -->
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M16 2C8.268 2 2 8.268 2 16c0 2.417.635 4.684 1.745 6.654L2 30l7.55-1.716A13.92 13.92 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.44 11.44 0 0 1-5.84-1.6l-.418-.248-4.48 1.018 1.04-4.36-.272-.447A11.461 11.461 0 0 1 4.5 16C4.5 9.596 9.596 4.5 16 4.5S27.5 9.596 27.5 16 22.404 27.5 16 27.5zm6.29-8.42c-.344-.172-2.037-1.005-2.352-1.12-.316-.115-.547-.172-.777.172-.23.344-.892 1.12-1.093 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.708-1.022-.913-1.713-2.04-1.913-2.385-.2-.344-.022-.53.15-.702.154-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.057-.431-.029-.603-.086-.172-.777-1.874-1.065-2.566-.28-.672-.566-.58-.777-.59l-.661-.012c-.23 0-.603.086-.919.431-.316.344-1.207 1.178-1.207 2.873s1.236 3.331 1.408 3.561c.172.23 2.432 3.712 5.893 5.205.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.037-.832 2.323-1.635.287-.803.287-1.491.2-1.635-.086-.144-.315-.23-.66-.402z"/>
+    </svg>
+  </a>
+</div>
+
+<script>
+/* ===== Toggle Mode Pelangi ===== */
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById("rainbowBtn");
+  var KEY = "mf_rainbow";
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) {}
+  function apply(on) {
+    root.classList.toggle("rainbow", on);
+    if (btn) btn.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  apply(saved !== "off");
+  if (btn) btn.addEventListener("click", function () {
+    var on = !root.classList.contains("rainbow");
+    apply(on);
+    try { localStorage.setItem(KEY, on ? "on" : "off"); } catch (e) {}
+  });
+})();
+</script>
+
+<script>
+/* ===== Typing Effect Banner ===== */
+(function () {
+  var el     = document.getElementById("typing-text");
+  var cursor = document.getElementById("typing-cursor");
+  if (!el) return;
+
+  var messages = [
+    "Di Larang Untuk Di Perjual Beli — APK Ini Di Buat Gratis",
+    "Gratis untuk semua. Jangan dijual belikan.",
+    "APK ini 100% gratis — dilarang diperjualbelikan."
+  ];
+
+  var msgIdx  = 0;
+  var charIdx = 0;
+  var deleting = false;
+  var pauseTimer = null;
+
+  function type() {
+    var current = messages[msgIdx];
+
+    if (!deleting) {
+      // Mengetik maju
+      charIdx++;
+      el.textContent = current.slice(0, charIdx);
+      if (charIdx === current.length) {
+        // Selesai mengetik — pause dulu sebelum hapus
+        deleting = true;
+        pauseTimer = setTimeout(type, 2800);
+        return;
+      }
+      setTimeout(type, 55);
+    } else {
+      // Menghapus mundur
+      charIdx--;
+      el.textContent = current.slice(0, charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        msgIdx = (msgIdx + 1) % messages.length;
+        setTimeout(type, 400);
+        return;
+      }
+      setTimeout(type, 28);
+    }
+  }
+
+  // Mulai setelah sedikit delay
+  setTimeout(type, 600);
+})();
+
+/* ===== Drag & Drop Tombol WhatsApp (ringan: transform + rAF) ===== */
+(function () {
+  var fab = document.getElementById("wa-fab");
+  var link = document.getElementById("wa-link");
+  if (!fab || !link) return;
+
+  var x = 0, y = 0, ox = 0, oy = 0;
+  var sx = 0, sy = 0, minX = 0, maxX = 0, minY = 0, maxY = 0;
+  var dragging = false, moved = false, handled = false, raf = 0;
+
+  function paint() {
+    raf = 0;
+    fab.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+  }
+
+  fab.addEventListener("pointerdown", function (e) {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    var r = fab.getBoundingClientRect();
+    var baseL = r.left - x, baseT = r.top - y;
+    minX = -baseL; maxX = window.innerWidth  - r.width  - baseL;
+    minY = -baseT; maxY = window.innerHeight - r.height - baseT;
+    ox = x; oy = y; sx = e.clientX; sy = e.clientY;
+    dragging = true; moved = false;
+    try { fab.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+
+  fab.addEventListener("pointermove", function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy;
+    if (!moved && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+    if (!moved) { moved = true; fab.classList.add("dragging"); }
+    x = Math.max(minX, Math.min(maxX, ox + dx));
+    y = Math.max(minY, Math.min(maxY, oy + dy));
+    if (!raf) raf = requestAnimationFrame(paint);
+    e.preventDefault();
+  });
+
+  function end(e) {
+    if (!dragging) return;
+    dragging = false;
+    fab.classList.remove("dragging");
+    try { fab.releasePointerCapture(e.pointerId); } catch (err) {}
+    if (!moved && e.type === "pointerup") {
+      handled = true;
+      window.open(link.href, "_blank", "noopener");
+      setTimeout(function () { handled = false; }, 50);
+    }
+  }
+  fab.addEventListener("pointerup", end);
+  fab.addEventListener("pointercancel", end);
+
+  link.addEventListener("click", function (e) {
+    if (moved || handled) { e.preventDefault(); moved = false; }
+  });
+
+  window.addEventListener("resize", function () {
+    x = 0; y = 0; paint();
+  });
+})();
+</script>
 
 <script>
 (function () {
@@ -662,7 +1004,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     $("adminPanel").classList.toggle("hidden-admin", !on);
     $("publicListArea").style.gridColumn = on ? "auto" : "1 / -1";
     $("adminToggle").classList.toggle("active", on);
-    $("adminToggle").textContent = on ? "🔓 Keluar Admin" : "🔒 Admin";
+    $("adminToggle").textContent = on ? "Keluar Admin" : "Admin";
     if (!on) { state.confirmId = null; resetForm(); }
     if (on) window.loadVisitStats();
     render();
@@ -694,8 +1036,8 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     try { token = await decryptToken(pass, db); }
     catch (e) {
       lock.fails = (lock.fails || 0) + 1;
-      if (lock.fails >= 5) { lock = { fails: 0, until: Date.now() + 300000 }; toast("❌ Password salah. Dikunci 5 menit."); }
-      else toast("❌ Password salah! Sisa percobaan: " + (5 - lock.fails));
+      if (lock.fails >= 5) { lock = { fails: 0, until: Date.now() + 300000 }; toast("Password salah. Dikunci 5 menit."); }
+      else toast("Password salah! Sisa percobaan: " + (5 - lock.fails));
       setLock(lock);
       return;
     }
@@ -719,10 +1061,10 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
           await replaceToken(owner, repo);
           return;
         }
-        if (!silent) showErr("❌ " + e.message);
+        if (!silent) showErr("" + e.message);
         return;
       }
-      if (!silent) showErr("❌ " + e.message);
+      if (!silent) showErr("" + e.message);
       return;
     }
     writeCfg({ owner: owner, repo: repo, token: token });
@@ -741,7 +1083,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
       GH.branch = info.default_branch || "main";
       var db = await encryptToken(sessionPass, GH.token, owner, repo);
       await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Perbarui token admin");
-    } catch (e) { GH.token = ""; showErr("❌ " + e.message); return; }
+    } catch (e) { GH.token = ""; showErr("" + e.message); return; }
     await enterAdmin(owner, repo, GH.token, false, false);
   }
 
@@ -762,7 +1104,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
       var repo = await ghFetch("/repos/" + encodeURIComponent(GH.owner) + "/" + encodeURIComponent(GH.repo));
       if (repo.permissions && repo.permissions.push === false) throw new Error("Token tidak punya izin menulis ke repo ini.");
       GH.branch = repo.default_branch || "main";
-    } catch (e) { GH.token = ""; showErr("❌ " + e.message); return; }
+    } catch (e) { GH.token = ""; showErr("" + e.message); return; }
 
     var p1 = prompt("Buat password admin (minimal 12 karakter, panjang dan unik):");
     if (p1 === null) { GH.token = ""; return; }
@@ -772,7 +1114,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
     try {
       var db = await encryptToken(p1, GH.token, GH.owner, GH.repo);
       await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Setup admin");
-    } catch (e) { GH.token = ""; showErr("❌ " + e.message); return; }
+    } catch (e) { GH.token = ""; showErr("" + e.message); return; }
     sessionPass = p1;
     await enterAdmin(GH.owner, GH.repo, GH.token, false, false);
     showErr("Admin siap. Mulai sekarang masuk cukup pakai password.");
@@ -802,7 +1144,7 @@ button svg, a.btn svg { width: 16px; height: 16px; flex: none; }
       await putFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "Ganti password admin");
       sessionPass = p1;
       toast("Password diganti. Berlaku dalam ±1 menit.");
-    } catch (e) { if (!handleAuthError(e)) showErr("❌ " + e.message); }
+    } catch (e) { if (!handleAuthError(e)) showErr("" + e.message); }
   };
 
   function handleAuthError(err) {
