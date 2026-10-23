@@ -569,7 +569,7 @@ footer.wrap a { color: var(--fg) !important; font-weight: 700; text-decoration: 
 <!-- ===== Tombol WhatsApp Floating Draggable ===== -->
 <div id="wa-fab" role="complementary" aria-label="Hubungi via WhatsApp">
   <span class="wa-tip">Chat WhatsApp</span>
-  <a href="https://wa.me/6288271102065?text=Cika%20gua%20mau%20buy%20apk%20bug"
+  <a href="https://wa.me/6283874668619?text=Cika%20gua%20mau%20buy%20apk%20bug"
      target="_blank" rel="noopener noreferrer"
      aria-label="Hubungi kami via WhatsApp"
      id="wa-link">
@@ -966,20 +966,31 @@ footer.wrap a { color: var(--fg) !important; font-weight: 700; text-decoration: 
     return "d" + new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" }).replace(/-/g, "");
   }
   async function counterCall(name, up) {
-    var r = await fetch(COUNTER_URL + name + "/" + (up ? "up" : ""), { cache: "no-store" });
-    if (r.status === 404) return 0;               // belum pernah dihitung
-    if (!r.ok) throw new Error(r.status);
-    var j = await r.json();
-    var n = j.count != null ? j.count : (j.value != null ? j.value : (j.data && j.data.up_count));
-    return Number(n) || 0;
+    var url = COUNTER_URL + name + "/" + (up ? "up" : "");
+    // membaca angka boleh diulang 1x; menambah (up) cuma 1x supaya tidak terhitung dobel
+    var tries = up ? 1 : 2;
+    for (var i = 0; i < tries; i++) {
+      try {
+        var r = await fetch(url, { cache: "no-store" });
+        if (r.status === 404) return 0;             // belum pernah dihitung
+        if (!r.ok) throw new Error(r.status);
+        var j = await r.json();
+        var n = j.count != null ? j.count : (j.value != null ? j.value : (j.data && j.data.up_count));
+        return Number(n) || 0;
+      } catch (e) {
+        if (i === tries - 1) throw e;
+        await new Promise(function (res) { setTimeout(res, 1200); });
+      }
+    }
   }
-  // hitung 1 kunjungan per browser per hari (kunjungan admin tidak dihitung)
+  // hitung setiap kunjungan baru (1x per sesi buka website; refresh tidak menambah)
   async function countVisit() {
     try {
-      var today = dayKey();
-      if (localStorage.getItem("mf_visit_day") === today) return;
-      await Promise.all([counterCall("total", true), counterCall(today, true)]);
-      localStorage.setItem("mf_visit_day", today);
+      var seen = false;
+      try { seen = sessionStorage.getItem("mf_visit_sess") === "1"; } catch (e) {}
+      if (seen) return;
+      await Promise.all([counterCall("total", true), counterCall(dayKey(), true)]);
+      try { sessionStorage.setItem("mf_visit_sess", "1"); } catch (e) {}
     } catch (e) {}
   }
   window.loadVisitStats = async function () {
@@ -989,7 +1000,10 @@ footer.wrap a { color: var(--fg) !important; font-weight: 700; text-decoration: 
       var r = await Promise.all([counterCall("total", false), counterCall(dayKey(), false)]);
       t.textContent = r[0].toLocaleString("id-ID");
       d.textContent = r[1].toLocaleString("id-ID");
-    } catch (e) { t.textContent = "—"; d.textContent = "—"; }
+    } catch (e) {
+      t.textContent = "—"; d.textContent = "—";
+      if (typeof toast === "function") toast("Counter belum bisa dihubungi. Tekan tombol perbarui untuk coba lagi.");
+    }
   };
   window.shareSite = async function () {
     try {
