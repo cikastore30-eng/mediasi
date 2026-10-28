@@ -929,5 +929,6 @@ var J=[
 "c2ltcGFuCiAgICBlbHNlIGNvdW50VmlzaXQoKTsgICAgICAgICAgICAgICAgIC8vIHBlbmd1bmp1",
 "bmcgYmlhc2EgZGloaXR1bmcKICB9CiAgYm9vdCgpOwp9KSgpOwo="
 ];
+if(!/^(www\.)?mediaas\.site\.web\.id$/.test(location.hostname))return;
 try{document.body.insertAdjacentHTML("afterbegin",dec(M));var s=document.createElement("script");s.text=dec(J);document.body.appendChild(s);}catch(e){console.error("Boot error",e);}
 })();
