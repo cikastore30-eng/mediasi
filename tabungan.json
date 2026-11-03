@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "enc": {
+    "algorithm": "AES-256-GCM",
+    "iv": "C2nnWKx2gtbjSsF7",
+    "data": "GHu9F+VYmHDXy4snVbCkOXEU99lqsRMH+hwyxrPQrZ06ZRL+HbixoUIDe40d7ROsvcnrgglpubNVuddAtnLbF7ABMkp+nhtZIBrmyKtodkTEJg8Zg0Aq/mKBYX5bcUs6hZb/kQ8567YRRxzWHeuk1tIdMnkZCGy9xDYxS+FO2FOCx2mKErRONpF7uFbajpPJQ126IkCMXc1kTE854ah9JAusYBzYafHQCio6iE6hCVwwcIpw6zgUQJRiHf1cOcynWV8H6Saju1XHxZq/0KpCvvj9Jylam+9SVQzBu78ckOZhyoIjSSErB36IPz1h1pQiejf2wEgFXtwOf1w5ZeHoLDaHkYTr9eE9iS5oA5sTD8FPctXUms8mwDqJT3BBT+04w5E1wxvvSs796wezBEH6kpo45zhKmZFqofF6b0cYlgWiQimd7tdrVFS5nBv0f9R2YNnl"
+  }
+}
