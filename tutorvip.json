@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "kdf": {
+    "algorithm": "PBKDF2-SHA256",
+    "iterations": 400000,
+    "salt": "ph9yzckTvK3kP5Vu488TTw=="
+  },
+  "enc": {
+    "algorithm": "AES-256-GCM",
+    "iv": "hBAFF4r3uqR8iLbR",
+    "data": "zpVRs1PrqUF6h+OE3/wM2ppSj6whOWoGzbmwwV7pRvDM15+TetHg+xFWcFwvA/nv/jLJrm5r2yLkzWj+wVI7DHaeXs1kmd5bJVe+s6eF/fZYWZwadwfyyvgse3JUflg1wf5W0xiDfoexjpv9sRFZ6mtwCKqjZQcSk1Sg4AHjMO7J+bwdeAEK98LKHYkQP8q3yGw0wirPUoQfAHLPaHUb7KBAoeN2yHjQrHIeJKAHDmDpZmB5WHlZMlBhRhchDo2qwvK1LqEueX8FpMEnIMyJlNHp/9LudB0gGqnMl82RrXtQh8T5ux5HumcAWiTbzSAwGGAn90QQ0HwwA9w0JsGHyYQgDJtNH4u7sDc89bG2eQrH6tzWtUxWMnoaM2ho99DJkCCdZCwmEnBqRFd6Ueo9FWSoiv4ofnajpyctCaCQ54MfwkItyS9hJMcVpIX4Vek1NLXoaRwzNFQlY0sjiFpYA+yqB02eiEqxQl54v9AbdF/jC6ZF394Y6u4Ku9HemhLQwiCtoJ2XXIWMODNHMravtmeOnOga40+y5/QA87f4Y21dfHB+9pLwXkW0bFvmQ4Afbg1tHP6ICpEDuUq0u2KRhMMKeE9ZCabEPEiyPxQgdFjbv0jDX96X+g=="
+  }
+}
