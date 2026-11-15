@@ -50,3 +50,93 @@ body.nx-lock .wa-float{visibility: hidden;}
 .ts-link:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--sh);}
 .ts-link svg{width:17px;height:17px;flex:none;}
 .ts-foot{margin:0 16px 16px;color:var(--muted);font-size:10.5px;text-align:center;letter-spacing:.2px;}
+
+
+/* ===== Testimoni: teks saja, langsung ke saluran ===== */
+.ts-pill{position:relative;display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 18px;overflow:hidden;font:800 13px var(--font-body);letter-spacing:.01em;color:#16130f;background:var(--c1);border:2px solid var(--line);border-radius:999px;box-shadow:3px 3px 0 var(--sh);text-decoration:none;white-space:nowrap;transition:transform .12s,box-shadow .12s}
+.ts-pill::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-20deg);animation:ts-shine 3.6s ease-in-out infinite;pointer-events:none}
+.ts-pill:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--sh)}
+.ts-pill:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--sh)}
+@keyframes ts-shine{0%,55%{left:-60%}100%{left:140%}}
+
+/* ===== Animasi scroll ===== */
+.sx{--e:cubic-bezier(.2,.8,.2,1)}
+.sx .sx-item{opacity:0;transition:opacity .7s var(--e) var(--sd,0ms),translate .85s var(--e) var(--sd,0ms),scale .85s var(--e) var(--sd,0ms),rotate .85s var(--e) var(--sd,0ms),filter .7s var(--e) var(--sd,0ms),transform .14s,box-shadow .14s}
+.sx .sx-up{translate:0 38px;scale:.97;filter:blur(5px)}
+.sx .sx-fade{translate:0 12px}
+.sx .sx-pop{translate:0 16px;scale:.8}
+.sx .sx-spin{scale:.35;rotate:-100deg}
+.sx .sx-item.sx-in{opacity:1;translate:0 0;scale:1;rotate:0deg;filter:none}
+.sx .hero-badge.sx-in{transform:translateY(var(--py,0px)) rotate(var(--pr,12deg))}
+.sx-progress{position:fixed;top:0;left:0;right:0;height:4px;z-index:210;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--accent),var(--c6));pointer-events:none;will-change:transform}
+html.rainbow .sx-progress{top:6px;height:3px}
+
+/* ===== Menu: chip VIP ===== */
+.nx-chip{flex:none;padding:3px 8px;font:800 10.5px var(--font-mono);letter-spacing:.12em;color:var(--hl);background:#16130f;border-radius:7px}
+#nxPanel .nx-item:hover .nx-chip,#nxPanel .nx-item:focus-visible .nx-chip{background:#16130f;color:var(--hl)}
+.tone-coral .nx-ico{animation:tv-wiggle 4.5s ease-in-out infinite}
+@keyframes tv-wiggle{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-12deg)}94%{transform:rotate(10deg)}97%{transform:rotate(-5deg)}}
+
+/* ===== Tutor VIP: gerbang ===== */
+#tvModal .nx-dhead{background:var(--c2)}
+.tv-gate{text-align:center;padding:4px 2px 2px}
+.tv-lock{position:relative;width:78px;height:78px;margin:8px auto 18px;display:grid;place-items:center;border-radius:50%;color:#16130f;background:var(--c2);border:2px solid var(--line);box-shadow:4px 4px 0 var(--sh)}
+.tv-lock svg{width:34px;height:34px}
+.tv-lock-ring{position:absolute;inset:-9px;border-radius:50%;border:2px dashed var(--muted);opacity:.65;animation:tv-spin 16s linear infinite}
+@keyframes tv-spin{to{transform:rotate(360deg)}}
+.tv-gate-title{margin:0 0 6px;font:800 1.3rem var(--font-display);letter-spacing:-.02em}
+.tv-gate .tv-desc{max-width:36ch;margin:0 auto 18px}
+.tv-field{text-align:left;margin-bottom:8px}
+.tv-input{position:relative}
+.tv-input input{padding-right:54px}
+.tv-eye{position:absolute;right:6px;top:50%;margin-top:-17px;width:34px;height:34px;padding:0;border-radius:8px;background:transparent;border:2px solid transparent;box-shadow:none}
+.tv-eye svg{width:18px;height:18px}
+.tv-input .tv-eye:hover:not(:disabled),.tv-input .tv-eye:active:not(:disabled){transform:none;box-shadow:none;background:var(--paper)}
+.tv-eye[aria-pressed="true"]{background:var(--hl);border-color:var(--line);color:#16130f}
+.tv-gate .err{margin:6px 0 4px;text-align:center}
+.tv-unlock{width:100%;margin-top:6px;padding:13px 16px;font-size:15px}
+.tv-unlock-s{display:none;width:16px;height:16px;border-radius:50%;border:3px solid rgba(22,19,15,.25);border-top-color:#16130f;animation:nx-rot .8s linear infinite}
+.tv-unlock.loading .tv-unlock-s{display:inline-block}
+.tv-unlock.loading .tv-unlock-t{opacity:.7}
+.tv-gate.shake{animation:tv-shake .45s}
+@keyframes tv-shake{20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+
+/* ===== Tutor VIP: daftar video ===== */
+.tv-welcome{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:18px;color:#16130f;background:var(--hl);border:2px solid var(--line);border-radius:16px;box-shadow:3px 3px 0 var(--sh);animation:tv-in .45s var(--e,cubic-bezier(.2,.8,.2,1)) backwards}
+.tv-badge{flex:none;padding:5px 10px;font:800 12px var(--font-mono);letter-spacing:.12em;color:var(--hl);background:#16130f;border-radius:8px}
+.tv-welcome strong{display:block;font:800 15px var(--font-display)}
+.tv-welcome small{display:block;margin-top:1px;font-size:12.5px;opacity:.8}
+.tv-cat{margin-bottom:22px}
+.tv-cat-title{display:flex;align-items:center;gap:9px;margin:0 0 10px;font:800 15.5px var(--font-display);letter-spacing:-.01em}
+.tv-cat-dot{flex:none;width:13px;height:13px;border-radius:50%;background:var(--tv);border:2px solid var(--line)}
+.tv-cat-title em{margin-left:auto;padding:2px 10px;font:700 11.5px var(--font-mono);font-style:normal;color:#16130f;background:var(--tv);border:2px solid var(--line);border-radius:999px}
+a.tv-entry{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:10px;color:var(--fg);text-decoration:none;background:var(--card);border:2px solid var(--line);border-radius:16px;box-shadow:3px 3px 0 var(--sh);transition:transform .15s,box-shadow .15s,background-color .18s;animation:tv-in .5s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 60ms + 80ms)}
+a.tv-entry:hover,a.tv-entry:focus-visible{color:#16130f;background:var(--tv);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--sh)}
+a.tv-entry:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--sh)}
+.tv-num{flex:none;width:40px;height:40px;display:grid;place-items:center;font:800 13px var(--font-mono);color:#16130f;background:var(--tv);border:2px solid var(--line);border-radius:12px;transition:background-color .18s}
+a.tv-entry:hover .tv-num{background:#fffdf8}
+.tv-info{flex:1;min-width:0;display:flex;flex-direction:column}
+.tv-info strong{font:700 14.5px/1.25 var(--font-body);overflow-wrap:anywhere}
+.tv-info small{margin-top:3px;color:var(--muted);font-size:12.5px;line-height:1.4;overflow-wrap:anywhere}
+a.tv-entry:hover .tv-info small{color:rgba(22,19,15,.8)}
+.tv-play{flex:none;width:38px;height:38px;display:grid;place-items:center;color:#16130f;background:var(--accent);border:2px solid var(--line);border-radius:50%;transition:transform .2s cubic-bezier(.2,.8,.2,1)}
+.tv-play svg{width:15px;height:15px;margin-left:2px}
+a.tv-entry:hover .tv-play{transform:scale(1.14)}
+@keyframes tv-in{from{opacity:0;transform:translateY(14px)}}
+
+/* ===== Header HP: semua tombol muat, tidak ada yang terpotong ===== */
+.top-actions{flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:480px){
+  .top-actions{margin-left:0;width:100%;justify-content:flex-start;gap:8px}
+  .ts-pill{padding:0 13px;font-size:12.5px}
+  .komunitas-toggle,.admin-toggle{padding:0 12px}
+  .icon-btn{width:40px;height:40px}
+  .ts-pill,.komunitas-toggle,.admin-toggle{height:40px}
+}
+
+@media (max-width:480px){
+  .top-actions{gap:6px}
+  .ts-pill{padding:0 11px}
+  .komunitas-toggle,.admin-toggle{padding:0 10px}
+}
+@media (max-width:380px){.komunitas-toggle svg{display:none}}
