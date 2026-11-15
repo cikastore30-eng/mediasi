@@ -140,3 +140,20 @@ a.tv-entry:hover .tv-play{transform:scale(1.14)}
   .komunitas-toggle,.admin-toggle{padding:0 10px}
 }
 @media (max-width:380px){.komunitas-toggle svg{display:none}}
+
+/* ===== Testimoni: kotak seperti Admin & Menu ===== */
+.ts-pill{height:42px;padding:10px 16px;border-radius:10px;font:700 13px var(--font-body);letter-spacing:0}
+@media (max-width:480px){.ts-pill{height:40px;padding:0 11px;font-size:12.5px}}
+
+/* ===== Tema warna: Merah & Biru putih ===== */
+html[data-theme="red"]{--c1:#ff8a8a;--c2:#ff5c5c;--c3:#ffb3b3;--c4:#ff7a7a;--c5:#ffc9c9;--c6:#ff4d6d;--accent:#e63946;--accent-fg:#ffffff;--hl:#ff8a8a}
+html[data-theme="blue"]{--c1:#4da3ff;--c2:#ffffff;--c3:#7cc4ff;--c4:#5aa9ff;--c5:#dbeafe;--c6:#9ad0ff;--accent:#1e6fe8;--accent-fg:#ffffff;--hl:#7cc4ff}
+@media not all and (prefers-color-scheme: dark){
+  html[data-theme="red"]{--paper:#fff1f0;--line:#2b0a0d;--sh:#2b0a0d;--dot:rgba(120,20,30,.12)}
+  html[data-theme="blue"]{--paper:#eaf3ff;--card:#ffffff;--line:#0b2a5b;--sh:#0b2a5b;--dot:rgba(30,90,200,.13)}
+}
+html[data-theme="blue"] .hero-tags li:nth-child(2),html[data-theme="blue"] .hero-tags li:nth-child(4){background:#ffffff}
+html[data-theme="red"] .primary,html[data-theme="blue"] .primary{color:#fff}
+html[data-theme] .mark{color:#fff}
+html[data-theme="blue"] .tv-play,html[data-theme="red"] .tv-play{color:#fff}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
