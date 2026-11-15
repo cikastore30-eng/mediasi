@@ -1,46 +1,273 @@
 <!DOCTYPE html>
-<html lang="id" class="rainbow">
+<html lang="id">
 <head>
-<!-- (c) 2026 MediaFire APK Center - mediaas.site.web.id. Seluruh hak cipta dilindungi. Dilarang menyalin tanpa izin. -->
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com https://api.counterapi.dev https://counterapi.dev https://hits.dwyl.com; frame-src 'none';">
-<title>Mediaas - MediaFire APK Center, Download APK Android</title>
-<meta name="description" content="Mediaas (mediaas.site.web.id) adalah kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat.">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="theme-color" content="#ff5a1f">
-<meta name="application-name" content="Mediaas">
-<link rel="canonical" href="https://mediaas.site.web.id/">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ff5a1f'/%3E%3Ctext x='32' y='41' font-size='24' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EAPK%3C/text%3E%3C/svg%3E">
-<!-- Open Graph (WhatsApp, Facebook, Telegram) -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Mediaas">
-<meta property="og:locale" content="id_ID">
-<meta property="og:title" content="Mediaas - MediaFire APK Center, Download APK Android">
-<meta property="og:description" content="Mediaas (mediaas.site.web.id) adalah kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat.">
-<meta property="og:url" content="https://mediaas.site.web.id/">
-<meta property="og:image" content="https://mediaas.site.web.id/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="MediaFire APK Center">
-<!-- Twitter / X -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Mediaas - MediaFire APK Center, Download APK Android">
-<meta name="twitter:description" content="Mediaas (mediaas.site.web.id) adalah kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat.">
-<meta name="twitter:image" content="https://mediaas.site.web.id/og-image.png">
-<!-- Data terstruktur -->
-<script type="application/ld+json" id="ld-site">{"@context": "https://schema.org", "@type": "WebSite", "name": "Mediaas", "alternateName": ["MediaFire APK Center", "mediaas.site.web.id"], "url": "https://mediaas.site.web.id/", "description": "Mediaas (mediaas.site.web.id) adalah kumpulan link download APK MediaFire terbaru. Cari, salin, dan unduh APK Android dengan mudah dan cepat.", "inLanguage": "id"}</script>
-<script type="application/ld+json" id="ld-list"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tutor VIP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=1794779073">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f1115;
+    --ink-2:#181b21;
+    --paper:#f3eee4;
+    --paper-2:#e9e2d3;
+    --gold:#d9a441;
+    --gold-soft:#f0d28f;
+    --muted:#8a8f99;
+    --line:rgba(255,255,255,.12);
+    --line-dark:rgba(15,17,21,.14);
+    --radius:18px;
+    --display:"Bricolage Grotesque",system-ui,sans-serif;
+    --body:"DM Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--ink);color:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+
+  /* ---------- NAV ---------- */
+  .nav{position:fixed;inset:0 0 auto 0;z-index:50;padding:18px 0;transition:background .3s,backdrop-filter .3s,border-color .3s;border-bottom:1px solid transparent}
+  .nav.solid{background:rgba(15,17,21,.82);backdrop-filter:blur(10px);border-color:var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between}
+  .logo{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
+  .logo span{color:var(--gold)}
+  .nav ul{display:flex;gap:28px;list-style:none;font-size:.95rem;color:#cfd2d8}
+  .nav ul a{position:relative;padding:4px 0}
+  .nav ul a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .3s}
+  .nav ul a:hover::after{width:100%}
+  @media(max-width:640px){.nav ul{display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;
+    background:
+      radial-gradient(900px 500px at 85% 15%,rgba(217,164,65,.16),transparent 60%),
+      radial-gradient(700px 500px at 0% 100%,rgba(217,164,65,.07),transparent 60%),
+      var(--ink)}
+  .hero::before{content:"";position:absolute;inset:0;opacity:.5;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:72px 72px;
+    -webkit-mask-image:radial-gradient(ellipse at 70% 30%,#000 0%,transparent 70%);
+            mask-image:radial-gradient(ellipse at 70% 30%,#000 0%,transparent 70%)}
+  .hero .wrap{position:relative;padding:120px 0 140px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft)}
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--gold)}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,7.5vw,5.6rem);line-height:.98;letter-spacing:-.035em;margin:22px 0 26px;max-width:14ch}
+  h1 em{font-style:normal;color:var(--gold)}
+  .hero p.lead{max-width:46ch;color:#c4c8d0;font-size:1.1rem}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;border-radius:999px;font-weight:600;font-size:.95rem;transition:transform .2s,background .2s,border-color .2s,color .2s;cursor:pointer;border:1px solid transparent}
+  .btn-gold{background:var(--gold);color:#17120a}
+  .btn-gold:hover{background:var(--gold-soft);transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line);color:var(--paper)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-soft)}
+
+  /* indikator scroll: cukup tulisan "Testimoni" + garis bergerak, klik langsung ke testimoni */
+  .scroll-cue{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;
+    font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:#aeb2ba;transition:color .25s}
+  .scroll-cue:hover{color:var(--gold-soft)}
+  .scroll-cue .track{position:relative;width:1px;height:54px;background:var(--line);overflow:hidden}
+  .scroll-cue .track::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--gold);animation:drip 1.9s cubic-bezier(.65,0,.35,1) infinite}
+  .scroll-cue span.label{animation:nudge 1.9s ease-in-out infinite}
+  @keyframes drip{0%{top:-40%}100%{top:100%}}
+  @keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  /* ---------- SECTION UMUM ---------- */
+  section{position:relative}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:56px}
+  .sec-head h2{font-family:var(--display);font-weight:800;font-size:clamp(2rem,4.6vw,3.4rem);line-height:1.03;letter-spacing:-.03em;max-width:15ch}
+  .sec-head p{max-width:38ch;color:var(--muted)}
+
+  /* ---------- TUTOR VIP ---------- */
+  #tutor-vip{background:var(--paper);color:var(--ink);padding:120px 0}
+  #tutor-vip .sec-head p{color:#5b5f68}
+  .vip-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:28px;align-items:start}
+  .tutor-list{border-top:1px solid var(--line-dark)}
+  .tutor{display:grid;grid-template-columns:64px 1fr auto;gap:22px;align-items:center;padding:26px 8px;border-bottom:1px solid var(--line-dark);position:relative;transition:padding .3s,background .3s}
+  .tutor::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .35s}
+  .tutor:hover{padding-left:22px;background:rgba(217,164,65,.08)}
+  .tutor:hover::before{transform:scaleY(1)}
+  .tutor .no{font-family:var(--display);font-weight:800;font-size:2rem;color:var(--paper-2);-webkit-text-stroke:1px #b9ae94;color:transparent}
+  .tutor h3{font-family:var(--display);font-size:1.35rem;letter-spacing:-.015em}
+  .tutor .meta{color:#5b5f68;font-size:.95rem;margin-top:2px}
+  .tag{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border:1px solid var(--line-dark);border-radius:999px;white-space:nowrap}
+
+  .vip-card{background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:34px 30px;position:sticky;top:96px;overflow:hidden}
+  .vip-card::after{content:"";position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(217,164,65,.35),transparent 70%)}
+  .vip-card small{color:var(--gold-soft);letter-spacing:.18em;text-transform:uppercase;font-size:.72rem}
+  .vip-card h3{font-family:var(--display);font-size:1.9rem;line-height:1.1;letter-spacing:-.02em;margin:10px 0 18px}
+  .vip-card ul{list-style:none;display:grid;gap:12px;margin-bottom:28px}
+  .vip-card li{display:flex;gap:12px;color:#d3d6dc;font-size:.97rem}
+  .vip-card li::before{content:"";flex:none;width:7px;height:7px;margin-top:10px;background:var(--gold);transform:rotate(45deg)}
+  .vip-card .btn{width:100%}
+  @media(max-width:900px){.vip-grid{grid-template-columns:1fr}.vip-card{position:relative;top:0}.tutor{grid-template-columns:48px 1fr}.tutor .tag{grid-column:2;justify-self:start}}
+
+  /* ---------- TESTIMONI ---------- */
+  #testimoni{padding:120px 0 130px;background:var(--ink)}
+  .quotes{columns:3 300px;column-gap:22px}
+  .quote{break-inside:avoid;margin-bottom:22px;padding:30px 28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--ink-2);transition:border-color .3s,transform .3s}
+  .quote:hover{border-color:rgba(217,164,65,.55);transform:translateY(-4px)}
+  .quote p{font-size:1.05rem;color:#e6e8ec}
+  .quote .who{display:flex;align-items:center;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+  .avatar{width:40px;height:40px;border-radius:50%;background:var(--gold);color:#17120a;display:grid;place-items:center;font-weight:700;font-family:var(--display)}
+  .who b{display:block;font-size:.95rem}
+  .who span{font-size:.8rem;color:var(--muted)}
+  .quote.big p{font-family:var(--display);font-size:1.45rem;line-height:1.3;letter-spacing:-.01em}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:.9rem}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    .scroll-cue .track::after,.scroll-cue span.label{animation:none}
+  }
+</style>
 </head>
 <body>
-<noscript><div style="padding:40px;text-align:center;font-family:sans-serif"><h1>MediaFire APK Center</h1><p>Kumpulan link download APK Android yang disimpan di MediaFire. Aktifkan JavaScript untuk membuka daftar APK.</p></div></noscript>
-<script src="app.js?v=1794779242"></script>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">Tutor<span>.</span>VIP</a>
+    <ul>
+      <li><a href="#tutor-vip">Tutor VIP</a></li>
+      <li><a href="#testimoni">Testimoni</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Bimbingan privat eksklusif</div>
+      <h1>Belajar dengan tutor yang <em>benar-benar</em> paham kamu.</h1>
+      <p class="lead">Sesi satu lawan satu, materi disesuaikan dengan kecepatan dan tujuanmu, bukan sekadar mengejar kurikulum.</p>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="#tutor-vip">Lihat Tutor VIP</a>
+        <a class="btn btn-ghost" href="#testimoni">Baca cerita mereka</a>
+      </div>
+    </div>
+
+    <a class="scroll-cue" href="#testimoni" aria-label="Ke bagian Testimoni">
+      <span class="label">Testimoni</span>
+      <span class="track" aria-hidden="true"></span>
+    </a>
+  </section>
+
+  <section id="tutor-vip">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>Tutor VIP, dipilih bukan sembarangan.</h2>
+        <p>Setiap tutor melewati seleksi materi dan simulasi mengajar sebelum bergabung.</p>
+      </div>
+
+      <div class="vip-grid">
+        <div class="tutor-list reveal">
+          <article class="tutor">
+            <div class="no">01</div>
+            <div>
+              <h3>Nama Tutor Satu</h3>
+              <div class="meta">Matematika &amp; Fisika · pengalaman 6 tahun</div>
+            </div>
+            <span class="tag">Online / Tatap muka</span>
+          </article>
+          <article class="tutor">
+            <div class="no">02</div>
+            <div>
+              <h3>Nama Tutor Dua</h3>
+              <div class="meta">Bahasa Inggris &amp; persiapan tes · pengalaman 5 tahun</div>
+            </div>
+            <span class="tag">Online</span>
+          </article>
+          <article class="tutor">
+            <div class="no">03</div>
+            <div>
+              <h3>Nama Tutor Tiga</h3>
+              <div class="meta">Kimia &amp; Biologi · pengalaman 4 tahun</div>
+            </div>
+            <span class="tag">Online / Tatap muka</span>
+          </article>
+        </div>
+
+        <aside class="vip-card reveal">
+          <small>Paket VIP</small>
+          <h3>Semua yang kamu perlukan, dalam satu paket.</h3>
+          <ul>
+            <li>Sesi privat satu lawan satu</li>
+            <li>Jadwal fleksibel, bisa diatur ulang</li>
+            <li>Materi dan latihan soal khusus</li>
+            <li>Laporan perkembangan berkala</li>
+            <li>Konsultasi di luar jam belajar</li>
+          </ul>
+          <a class="btn btn-gold" href="#kontak">Konsultasi Sekarang</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimoni">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>Kata mereka yang sudah mencoba.</h2>
+        <p>Cerita nyata dari murid dan orang tua.</p>
+      </div>
+
+      <div class="quotes">
+        <figure class="quote big reveal">
+          <p>Nilai saya naik jauh dalam dua bulan. Penjelasannya pelan, jelas, dan tidak pernah bikin saya merasa bodoh.</p>
+          <figcaption class="who"><div class="avatar">A</div><div><b>Nama Murid</b><span>Kelas 12</span></div></figcaption>
+        </figure>
+        <figure class="quote reveal">
+          <p>Anak saya jadi lebih percaya diri dan mau bertanya. Laporannya juga rutin, jadi kami tahu progresnya.</p>
+          <figcaption class="who"><div class="avatar">B</div><div><b>Nama Orang Tua</b><span>Wali murid</span></div></figcaption>
+        </figure>
+        <figure class="quote reveal">
+          <p>Jadwalnya fleksibel dan tutornya sabar. Persiapan tes saya jauh lebih terarah.</p>
+          <figcaption class="who"><div class="avatar">C</div><div><b>Nama Murid</b><span>Mahasiswa</span></div></figcaption>
+        </figure>
+        <figure class="quote reveal">
+          <p>Materi yang dulu bikin pusing sekarang terasa masuk akal. Rasanya seperti belajar dengan kakak sendiri.</p>
+          <figcaption class="who"><div class="avatar">D</div><div><b>Nama Murid</b><span>Kelas 11</span></div></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="kontak">
+  <div class="wrap">
+    <span>© <span id="yr"></span> Tutor.VIP</span>
+    <a href="https://wa.me/62XXXXXXXXXXX" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+  // nav berubah saat discroll
+  var nav = document.getElementById('nav');
+  function onScroll(){ nav.classList.toggle('solid', window.scrollY > 40); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  // muncul halus saat masuk layar
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.15});
+    items.forEach(function(el, i){ el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+  } else {
+    items.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
