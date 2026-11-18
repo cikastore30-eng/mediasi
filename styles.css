@@ -157,3 +157,8 @@ html[data-theme="red"] .primary,html[data-theme="blue"] .primary{color:#fff}
 html[data-theme] .mark{color:#fff}
 html[data-theme="blue"] .tv-play,html[data-theme="red"] .tv-play{color:#fff}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
+
+/* Testimoni: sama seperti Admin & Menu (tanpa warna kuning, tanpa efek) */
+a.tsx-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin:0;text-decoration:none;white-space:nowrap;font-family:inherit;font-weight:700;line-height:1.6;background:var(--card);color:var(--fg);border:2px solid var(--line);border-radius:10px;box-shadow:3px 3px 0 var(--sh);cursor:pointer;transition:transform .12s,box-shadow .12s,background-color .12s}
+a.tsx-link:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--sh)}
+a.tsx-link:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--sh)}
