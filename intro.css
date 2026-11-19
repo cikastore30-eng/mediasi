@@ -1,0 +1,42 @@
+/* Intro animasi naga - Mediaas */
+#intro,#introWipe{position:fixed;inset:0;}
+#intro{z-index:9999;background:#000;display:grid;place-items:center;overflow:hidden;touch-action:manipulation;cursor:pointer;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);}
+#intro.hide{display:none}
+#intro .glow{position:absolute;inset:0;background:radial-gradient(60% 45% at 50% 50%,rgba(0,229,255,.16),transparent 70%);animation:introGlow 3s ease-in-out infinite alternate}
+#intro .grid{position:absolute;inset:-20%;background-image:linear-gradient(rgba(0,229,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.07) 1px,transparent 1px);background-size:44px 44px;transform:perspective(500px) rotateX(62deg) translateY(0);transform-origin:50% 100%;mask-image:linear-gradient(to top,#000 0,transparent 65%);-webkit-mask-image:linear-gradient(to top,#000 0,transparent 65%);animation:introGrid 2.4s linear infinite;opacity:0;transition:opacity 1.2s .6s}
+#intro.on .grid{opacity:1}
+#intro .scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+#intro .vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.85))}
+#intro video{position:relative;width:min(92vw,620px);max-height:62vh;object-fit:contain;display:block;background:#000;
+  mix-blend-mode:screen;-webkit-mask-image:radial-gradient(ellipse 80% 82% at 50% 50%,#000 78%,transparent 100%);mask-image:radial-gradient(ellipse 80% 82% at 50% 50%,#000 78%,transparent 100%);transform-origin:50% 48%;will-change:transform,filter,opacity}
+#intro.go video{animation:introZoom 1s cubic-bezier(.6,0,.9,.4) forwards}
+#intro .bar{position:absolute;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.08)}
+#intro .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd23f,#ff7a59,#6fdcae,#6ec6ff,#c3a6ff,#ff9ecb);box-shadow:0 0 12px rgba(110,198,255,.8)}
+#intro.on .bar i{width:100%;transition:width 5s linear}
+#intro .ctl{position:absolute;top:max(14px,env(safe-area-inset-top,0));right:max(14px,env(safe-area-inset-right,0));display:flex;gap:10px;z-index:3}
+#intro .ctl button{width:44px;height:44px;padding:0;display:grid;place-items:center;border-radius:12px;background:rgba(0,229,255,.08);color:#7defff;border:1.5px solid rgba(0,229,255,.45);box-shadow:0 0 14px rgba(0,229,255,.2);backdrop-filter:blur(4px);cursor:pointer;transition:transform .12s,background .12s}
+#intro .ctl button:hover{background:rgba(0,229,255,.18)}
+#intro .ctl button:active{transform:scale(.92)}
+#intro .ctl svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#intro #iSnd.pulse{animation:introPulse 1.2s ease-in-out infinite}
+#intro #iSnd .on{display:none}#intro #iSnd.live .on{display:block}#intro #iSnd.live .off{display:none}
+#introWipe{z-index:10000;pointer-events:none;display:none;flex-direction:column}
+#introWipe.run{display:flex}
+#introWipe i{flex:1;transform:translateX(-101%);animation:introWipe .9s cubic-bezier(.77,0,.18,1) forwards}
+#introWipe i:nth-child(1){background:#ffd23f;animation-delay:0s}
+#introWipe i:nth-child(2){background:#ff7a59;animation-delay:.05s}
+#introWipe i:nth-child(3){background:#6fdcae;animation-delay:.1s}
+#introWipe i:nth-child(4){background:#6ec6ff;animation-delay:.15s}
+#introWipe i:nth-child(5){background:#c3a6ff;animation-delay:.2s}
+#introWipe i:nth-child(6){background:#ff9ecb;animation-delay:.25s}
+body.intro-lock{overflow:hidden}
+@keyframes introGlow{from{opacity:.6}to{opacity:1}}
+@keyframes introGrid{to{background-position:0 44px}}
+@keyframes introPulse{50%{transform:scale(1.12);box-shadow:0 0 22px rgba(0,229,255,.6)}}
+@keyframes introZoom{0%{transform:scale(1);filter:brightness(1)}
+  60%{opacity:1}100%{transform:scale(2.6);opacity:0;filter:brightness(2.2) blur(3px)}}
+@keyframes introWipe{0%{transform:translateX(-101%)}45%,55%{transform:translateX(0)}100%{transform:translateX(101%)}}
+@media (max-width:900px){#intro video{width:100vw;max-width:none;max-height:none}}
+@media (min-width:901px){#intro video{width:min(80vw,760px)}}
+@media (prefers-reduced-motion:reduce){#intro,#introWipe{display:none!important}}
