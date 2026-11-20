@@ -6,8 +6,7 @@
 
   var TOTAL = 6000, IMPACT = 2889;
   var t0 = performance.now(), done = false, rafId = 0;
-  var au = null, soundStarted = false, muted = false;
-  var btnSnd = root.querySelector('.fx-snd');
+  var au = null, soundStarted = false;
 
   function now() { return performance.now() - t0; }
 
@@ -28,7 +27,7 @@
     de.classList.remove('fx-on');
     if (root.parentNode) root.parentNode.removeChild(root);
     if (au) { try { au.pause(); } catch (e) {} au = null; }
-    ['pointerdown', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.removeEventListener(ev, unlock, true); });
+    EVS.forEach(function (ev) { document.removeEventListener(ev, unlock, true); });
   }
   function fadeAudio() {
     if (!au) return;
@@ -37,44 +36,32 @@
     }, 40);
   }
 
-  /* ---------- suara ---------- */
+  /* ---------- suara (otomatis, tanpa tombol) ---------- */
   function startAudio() {
     if (!au || soundStarted || done) return;
     var p;
-    try { p = au.play(); } catch (e) { return needTap(); }
+    try { p = au.play(); } catch (e) { return; }
     var ok = function () {
-      soundStarted = true; btnSnd.classList.remove('need');
+      soundStarted = true;
       var el = now() / 1000;
       if (el > .35 && el < 5.9) { try { au.currentTime = el; } catch (e) {} }
     };
-    if (p && p.then) p.then(ok, needTap); else ok();
+    if (p && p.then) p.then(ok, function () { soundStarted = false; }); else ok();
   }
-  function needTap() {
-    soundStarted = false;
-    if (!muted) btnSnd.classList.add('need');
-  }
-  function unlock(e) {
-    if (e.target && e.target.closest && e.target.closest('.fx-snd')) return; /* diurus tombolnya */
-    if (!muted) startAudio();
-  }
+  var EVS = ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'mousedown', 'click', 'keydown'];
+  function unlock() { startAudio(); }
   try {
     au = new Audio('intro.mp3'); au.preload = 'auto'; au.volume = .9;
     startAudio();
-    au.addEventListener('canplaythrough', function () { if (!soundStarted) startAudio(); });
-    ['pointerdown', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, unlock, true); });
-  } catch (e) { au = null; btnSnd.style.display = 'none'; }
-
-  btnSnd.addEventListener('click', function () {
-    if (!au) return;
-    if (!soundStarted && !muted) { startAudio(); return; }
-    muted = !muted; au.muted = muted;
-    btnSnd.classList.toggle('off', muted); btnSnd.setAttribute('aria-pressed', String(muted));
-    if (!muted && !soundStarted) startAudio();
-  });
+    au.addEventListener('canplaythrough', startAudio);
+    /* kalau browser memblokir, sentuhan/klik pertama di mana saja langsung menyalakan suara */
+    EVS.forEach(function (ev) { document.addEventListener(ev, unlock, true); });
+    var retry = setInterval(function () { if (soundStarted || done) clearInterval(retry); else startAudio(); }, 250);
+  } catch (e) { au = null; }
 
   /* ---------- partikel ---------- */
   var cv = root.querySelector('canvas'), cx = cv.getContext('2d');
-  var cols = ['#ffd23f', '#ff7a59', '#6fdcae', '#6ec6ff', '#c3a6ff', '#ff9ecb', '#ff5a1f'];
+  var cols = ['#ffffff', '#bff0ff', '#9fe6ff', '#6ec6ff', '#3aaeff', '#e8fbff'];
   var W = 0, H = 0, dpr = 1, P = [], burst = false;
   var small = Math.min(window.innerWidth, window.innerHeight) < 600;
   function resize() {
