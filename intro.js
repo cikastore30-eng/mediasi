@@ -27,7 +27,7 @@
     de.classList.remove('fx-on');
     if (root.parentNode) root.parentNode.removeChild(root);
     if (au) { try { au.pause(); } catch (e) {} au = null; }
-    EVS.forEach(function (ev) { document.removeEventListener(ev, unlock, true); });
+    EVS.forEach(function (ev) { document.removeEventListener(ev, unlock, true); window.removeEventListener(ev, unlock); });
   }
   function fadeAudio() {
     if (!au) return;
@@ -37,25 +37,28 @@
   }
 
   /* ---------- suara (otomatis, tanpa tombol) ---------- */
+  var trying = false;
   function startAudio() {
-    if (!au || soundStarted || done) return;
+    if (!au || soundStarted || done || trying) return;
     var p;
     try { p = au.play(); } catch (e) { return; }
+    trying = true;
     var ok = function () {
-      soundStarted = true;
+      trying = false; soundStarted = true;
       var el = now() / 1000;
       if (el > .35 && el < 5.9) { try { au.currentTime = el; } catch (e) {} }
     };
-    if (p && p.then) p.then(ok, function () { soundStarted = false; }); else ok();
+    if (p && p.then) p.then(ok, function () { trying = false; soundStarted = false; }); else ok();
   }
-  var EVS = ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'mousedown', 'click', 'keydown'];
+  /* semua jenis interaksi dicoba sebagai pemicu suara (klik, sentuh, scroll, gerak mouse, tombol, fokus) */
+  var EVS = ['pointerdown', 'pointerup', 'touchstart', 'touchmove', 'touchend', 'mousedown', 'mousemove', 'wheel', 'scroll', 'click', 'keydown', 'focus'];
   function unlock() { startAudio(); }
   try {
     au = new Audio('intro.mp3'); au.preload = 'auto'; au.volume = .9;
     startAudio();
     au.addEventListener('canplaythrough', startAudio);
     /* kalau browser memblokir, sentuhan/klik pertama di mana saja langsung menyalakan suara */
-    EVS.forEach(function (ev) { document.addEventListener(ev, unlock, true); });
+    EVS.forEach(function (ev) { document.addEventListener(ev, unlock, { capture: true, passive: true }); window.addEventListener(ev, unlock, { passive: true }); });
     var retry = setInterval(function () { if (soundStarted || done) clearInterval(retry); else startAudio(); }, 250);
   } catch (e) { au = null; }
 
