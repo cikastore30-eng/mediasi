@@ -36,31 +36,67 @@
     }, 40);
   }
 
-  /* ---------- suara (otomatis, tanpa tombol) ---------- */
+  /* ---------- suara intro: autoplay + fallback interaksi ---------- */
   var trying = false;
-  function startAudio() {
-    if (!au || soundStarted || done || trying) return;
+  function startAudio(fromGesture) {
+    if (!au || soundStarted || done) return;
+    // Jika ada interaksi nyata, coba play() langsung dari event tersebut.
+    // Jangan biarkan percobaan autoplay yang masih pending menghalangi gesture.
+    if (trying && !fromGesture) return;
+
     var p;
-    try { p = au.play(); } catch (e) { return; }
-    trying = true;
+    try {
+      p = au.play();
+      trying = true;
+    } catch (e) {
+      trying = false;
+      return;
+    }
+
     var ok = function () {
-      trying = false; soundStarted = true;
-      var el = now() / 1000;
-      if (el > .35 && el < 5.9) { try { au.currentTime = el; } catch (e) {} }
+      trying = false;
+      if (done || !au) return;
+      soundStarted = true;
+      var elapsed = now() / 1000;
+      if (elapsed > 0.35 && elapsed < 5.9) {
+        try { au.currentTime = elapsed; } catch (e) {}
+      }
     };
-    if (p && p.then) p.then(ok, function () { trying = false; soundStarted = false; }); else ok();
+    var fail = function () {
+      trying = false;
+      soundStarted = false;
+    };
+
+    if (p && typeof p.then === 'function') p.then(ok).catch(fail);
+    else ok();
   }
-  /* semua jenis interaksi dicoba sebagai pemicu suara (klik, sentuh, scroll, gerak mouse, tombol, fokus) */
-  var EVS = ['pointerdown', 'pointerup', 'touchstart', 'touchmove', 'touchend', 'mousedown', 'mousemove', 'wheel', 'scroll', 'click', 'keydown', 'focus'];
-  function unlock() { startAudio(); }
+
+  // Autoplay dicoba segera saat intro dimulai. Browser tetap dapat memblokir
+  // audio bersuara sampai pengunjung melakukan interaksi.
+  var EVS = ['pointerdown', 'touchstart', 'mousedown', 'keydown', 'click'];
+  function unlock() { startAudio(true); }
   try {
-    au = new Audio('intro.mp3'); au.preload = 'auto'; au.volume = .9;
-    startAudio();
-    au.addEventListener('canplaythrough', startAudio);
-    /* kalau browser memblokir, sentuhan/klik pertama di mana saja langsung menyalakan suara */
-    EVS.forEach(function (ev) { document.addEventListener(ev, unlock, { capture: true, passive: true }); window.addEventListener(ev, unlock, { passive: true }); });
-    var retry = setInterval(function () { if (soundStarted || done) clearInterval(retry); else startAudio(); }, 250);
-  } catch (e) { au = null; }
+    au = new Audio('intro.mp3');
+    au.preload = 'auto';
+    au.autoplay = true;
+    au.playsInline = true;
+    au.volume = 0.9;
+    au.load();
+
+    startAudio(false);
+    au.addEventListener('canplay', function () { startAudio(false); }, { once: true });
+
+    EVS.forEach(function (ev) {
+      document.addEventListener(ev, unlock, { capture: true, passive: true });
+    });
+
+    var retry = setInterval(function () {
+      if (soundStarted || done) clearInterval(retry);
+      else startAudio(false);
+    }, 1000);
+  } catch (e) {
+    au = null;
+  }
 
   /* ---------- partikel ---------- */
   var cv = root.querySelector('canvas'), cx = cv.getContext('2d');
