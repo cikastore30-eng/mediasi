@@ -1,5 +1,5 @@
 /* Intro Dragon - Mediaas. Tanpa teks; suara dari intro.mp3. Total durasi ~5.4s */
-#introFx{display:none;--fx-bg:#0f0d0a;--fx-fg:#f4efe4;--fx-a:#ff5a1f;--fx-y:#ffd23f;--fx-c2:#ff7a59;--fx-c3:#6fdcae;--fx-c4:#6ec6ff;--fx-c5:#c3a6ff;--fx-c6:#ff9ecb;
+#introFx{display:none;--fx-bg:#06090d;--fx-fg:#f4efe4;--fx-a:#6ec6ff;--fx-y:#9fe6ff;--fx-c2:#ff7a59;--fx-c3:#6fdcae;--fx-c4:#6ec6ff;--fx-c5:#c3a6ff;--fx-c6:#ff9ecb;
   position:fixed;inset:0;z-index:100000;overflow:hidden;pointer-events:auto;touch-action:manipulation;
   transition:opacity .45s ease}
 html.fx-on #introFx{display:block}
@@ -8,12 +8,12 @@ html.fx-on,html.fx-on body{overflow:hidden}
 
 /* dua panel yang membelah layar saat masuk ke website */
 #introFx .fx-panel{position:absolute;left:0;right:0;height:50.2%;z-index:1;background-color:var(--fx-bg);
-  background-image:radial-gradient(rgba(244,239,228,.09) 1.2px,transparent 1.4px);background-size:22px 22px;will-change:transform}
-#introFx .fx-top{top:0;animation:fx-open-top 1s cubic-bezier(.77,0,.18,1) 4.25s forwards}
-#introFx .fx-bot{bottom:0;animation:fx-open-bot 1s cubic-bezier(.77,0,.18,1) 4.25s forwards}
+  background-image:radial-gradient(rgba(160,215,255,.08) 1.2px,transparent 1.4px);background-size:22px 22px;will-change:transform}
+#introFx .fx-top{top:0;animation:fx-open-top 1.111s cubic-bezier(.77,0,.18,1) 4.722s forwards}
+#introFx .fx-bot{bottom:0;animation:fx-open-bot 1.111s cubic-bezier(.77,0,.18,1) 4.722s forwards}
 #introFx .fx-panel::after{content:"";position:absolute;left:0;right:0;height:6px;opacity:0;
-  background:linear-gradient(90deg,var(--fx-y) 0 16.66%,var(--fx-c2) 0 33.33%,var(--fx-c3) 0 50%,var(--fx-c4) 0 66.66%,var(--fx-c5) 0 83.33%,var(--fx-c6) 0);
-  animation:fx-edge .1s linear 4.25s forwards}
+  background:linear-gradient(90deg,#5cc8ff,#bff0ff,#ffffff,#bff0ff,#5cc8ff);
+  animation:fx-edge 0.111s linear 4.722s forwards}
 #introFx .fx-top::after{bottom:0}
 #introFx .fx-bot::after{top:0}
 @keyframes fx-open-top{to{transform:translateY(-102%)}}
@@ -24,20 +24,20 @@ html.fx-on,html.fx-on body{overflow:hidden}
 #introFx .fx-vig{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:radial-gradient(ellipse at 50% 50%,transparent 38%,rgba(0,0,0,.6) 100%),
   repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);
-  animation:fx-fadeout .35s ease 4.05s forwards}
-#introFx canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;animation:fx-fadeout .35s ease 4.05s forwards}
+  animation:fx-fadeout 0.389s ease 4.5s forwards}
+#introFx canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;animation:fx-fadeout 0.389s ease 4.5s forwards}
 
 /* panggung dragon: selalu muat di HP (portrait) maupun laptop (landscape) */
 #introFx .fx-stage{position:absolute;left:50%;top:50%;z-index:3;width:min(92vw,calc(66vh * 1.415),700px);aspect-ratio:460/325;
-  transform:translate(-50%,-50%);animation:fx-exit .5s cubic-bezier(.5,0,.8,.4) 4s forwards}
-#introFx .fx-inner{position:absolute;inset:0;animation:fx-punch .5s cubic-bezier(.2,.9,.3,1) 2.6s both}
+  transform:translate(-50%,-50%);animation:fx-exit 0.556s cubic-bezier(.5,0,.8,.4) 4.444s forwards}
+#introFx .fx-inner{position:absolute;inset:0;animation:fx-punch 0.556s cubic-bezier(.2,.9,.3,1) 2.889s both}
 @keyframes fx-exit{to{transform:translate(-50%,-50%) scale(1.35);opacity:0}}
 @keyframes fx-fadeout{to{opacity:0}}
 @keyframes fx-punch{0%{transform:scale(1)}30%{transform:scale(1.07) translate(0,-1%)}60%{transform:scale(.985) translate(.6%,0)}100%{transform:scale(1)}}
 
 #introFx .fx-aura{position:absolute;left:50%;top:52%;width:150%;aspect-ratio:1;transform:translate(-50%,-50%) scale(.4);border-radius:50%;opacity:0;
-  background:radial-gradient(circle,rgba(255,122,89,.40) 0%,rgba(255,90,31,.18) 32%,transparent 62%);
-  animation:fx-aura 1.6s ease-out .3s forwards,fx-breath 1.6s ease-in-out 3s infinite}
+  background:radial-gradient(circle,rgba(90,195,255,.34) 0%,rgba(40,140,255,.16) 32%,transparent 62%);
+  animation:fx-aura 1.778s ease-out 0.333s forwards,fx-breath 1.778s ease-in-out 3.333s infinite}
 @keyframes fx-aura{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 @keyframes fx-breath{50%{transform:translate(-50%,-50%) scale(1.08);opacity:.75}}
 
@@ -45,47 +45,47 @@ html.fx-on,html.fx-on body{overflow:hidden}
 #introFx svg.fx-bigglow{filter:blur(14px)}
 #introFx svg.fx-smallglow{filter:blur(4px)}
 #introFx .fx-stroke,#introFx .fx-strokeglow{fill:none;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;
-  animation:fx-draw 2.35s cubic-bezier(.55,.05,.25,1) .15s forwards,fx-hide .3s ease 2.6s forwards}
+  animation:fx-draw 2.611s cubic-bezier(.55,.05,.25,1) 0.167s forwards,fx-hide 0.333s ease 2.889s forwards}
 #introFx .fx-stroke{stroke:url(#fxG)}
 #introFx .fx-strokeglow{stroke:url(#fxG);stroke-width:3;opacity:.7}
 @keyframes fx-draw{to{stroke-dashoffset:0}}
 @keyframes fx-hide{to{opacity:0}}
 
-#introFx .fx-fill{fill:url(#fxF);opacity:0;animation:fx-on .25s ease-out 2.45s forwards}
-#introFx .fx-g1,#introFx .fx-g2{opacity:0;animation:fx-on .4s ease-out 2.55s forwards}
-#introFx .fx-g2{animation:fx-on .5s ease-out 2.55s forwards,fx-pulse 1.4s ease-in-out 3.1s infinite}
+#introFx .fx-fill{fill:url(#fxF);opacity:0;animation:fx-on 0.278s ease-out 2.722s forwards}
+#introFx .fx-g1,#introFx .fx-g2{opacity:0;animation:fx-on 0.444s ease-out 2.833s forwards}
+#introFx .fx-g2{animation:fx-on 0.556s ease-out 2.833s forwards,fx-pulse 1.556s ease-in-out 3.444s infinite}
 @keyframes fx-on{to{opacity:1}}
 @keyframes fx-pulse{50%{opacity:.55}}
 
 /* kilau yang menyapu dragon setelah terisi */
-#introFx .fx-shine{fill:url(#fxS);transform:translateX(-200px);animation:fx-sweep .9s cubic-bezier(.4,0,.2,1) 2.85s forwards}
+#introFx .fx-shine{fill:url(#fxS);transform:translateX(-200px);animation:fx-sweep 1.0s cubic-bezier(.4,0,.2,1) 3.167s forwards}
 @keyframes fx-sweep{to{transform:translateX(560px)}}
 
 /* glitch RGB split */
-#introFx .fx-gr,#introFx .fx-gb{opacity:0;mix-blend-mode:screen;animation:fx-glitch .38s steps(1) 3.1s 1}
-#introFx .fx-gr{fill:var(--fx-c6)}
-#introFx .fx-gb{fill:var(--fx-c4);animation-name:fx-glitch2}
+#introFx .fx-gr,#introFx .fx-gb{opacity:0;mix-blend-mode:screen;animation:fx-glitch 0.422s steps(1) 3.444s 1}
+#introFx .fx-gr{fill:#e8fbff}
+#introFx .fx-gb{fill:#3aaeff;animation-name:fx-glitch2}
 @keyframes fx-glitch{0%{opacity:.9;transform:translate(-4px,1px)}20%{opacity:.9;transform:translate(3px,-2px)}40%{opacity:0}55%{opacity:.9;transform:translate(-6px,0)}75%{opacity:.9;transform:translate(2px,2px)}100%{opacity:0}}
 @keyframes fx-glitch2{0%{opacity:.9;transform:translate(4px,-1px)}20%{opacity:.9;transform:translate(-3px,2px)}40%{opacity:0}55%{opacity:.9;transform:translate(6px,0)}75%{opacity:.9;transform:translate(-2px,-2px)}100%{opacity:0}}
 
 /* gelombang kejut */
 #introFx .fx-ring{position:absolute;left:50%;top:50%;width:70%;aspect-ratio:1;border-radius:50%;border:3px solid var(--fx-a);opacity:0;transform:translate(-50%,-50%) scale(.15)}
-#introFx .fx-ring.r1{animation:fx-ring .95s cubic-bezier(.1,.7,.3,1) 2.6s forwards}
-#introFx .fx-ring.r2{border-color:var(--fx-y);animation:fx-ring 1.1s cubic-bezier(.1,.7,.3,1) 2.72s forwards}
+#introFx .fx-ring.r1{animation:fx-ring 1.056s cubic-bezier(.1,.7,.3,1) 2.889s forwards}
+#introFx .fx-ring.r2{border-color:var(--fx-y);animation:fx-ring 1.222s cubic-bezier(.1,.7,.3,1) 3.022s forwards}
 @keyframes fx-ring{0%{opacity:1;transform:translate(-50%,-50%) scale(.15)}100%{opacity:0;transform:translate(-50%,-50%) scale(3.2)}}
 #introFx .fx-flash{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;
-  background:radial-gradient(circle at 50% 50%,rgba(255,246,224,.9),rgba(255,122,89,.45) 30%,transparent 65%);animation:fx-flash .6s ease-out 2.6s forwards}
+  background:radial-gradient(circle at 50% 50%,rgba(235,250,255,.92),rgba(80,190,255,.45) 30%,transparent 65%);animation:fx-flash 0.667s ease-out 2.889s forwards}
 @keyframes fx-flash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
 
 /* bar pelangi tipis sebagai indikator tanpa teks */
 #introFx .fx-bar{position:absolute;left:0;right:0;bottom:0;height:5px;z-index:5;transform-origin:left;transform:scaleX(0);
-  background:linear-gradient(90deg,var(--fx-y) 0 16.66%,var(--fx-c2) 0 33.33%,var(--fx-c3) 0 50%,var(--fx-c4) 0 66.66%,var(--fx-c5) 0 83.33%,var(--fx-c6) 0);
-  animation:fx-bar 4.1s cubic-bezier(.5,.1,.3,1) 0s forwards,fx-fadeout .25s ease 4.1s forwards}
+  background:linear-gradient(90deg,#5cc8ff,#bff0ff,#ffffff,#bff0ff,#5cc8ff);
+  animation:fx-bar 4.556s cubic-bezier(.5,.1,.3,1) 0.0s forwards,fx-fadeout 0.278s ease 4.556s forwards}
 @keyframes fx-bar{to{transform:scaleX(1)}}
 
 /* tombol ikon (tanpa teks): suara & lewati */
 #introFx .fx-ctl{position:absolute;z-index:6;top:max(14px,env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px));display:flex;gap:10px;
-  animation:fx-fadeout .3s ease 4.1s forwards}
+  animation:fx-fadeout 0.333s ease 4.556s forwards}
 #introFx .fx-btn{all:unset;box-sizing:border-box;width:44px;height:44px;display:grid;place-items:center;cursor:pointer;color:var(--fx-fg);
   background:rgba(34,30,24,.85);border:2px solid var(--fx-fg);border-radius:50%;box-shadow:3px 3px 0 #000;transition:transform .12s,box-shadow .12s,background-color .12s;
   -webkit-tap-highlight-color:transparent}
@@ -96,8 +96,9 @@ html.fx-on,html.fx-on body{overflow:hidden}
 #introFx .fx-snd .i-off{display:none}
 #introFx .fx-snd.off .i-on{display:none}
 #introFx .fx-snd.off .i-off{display:block}
-#introFx .fx-snd.need{background:var(--fx-y);color:#16130f;border-color:#16130f;animation:fx-need 1.1s ease-in-out infinite}
+#introFx .fx-snd.need{background:#6ec6ff;color:#06090d;border-color:#06090d;animation:fx-need 1.222s ease-in-out infinite}
 @keyframes fx-need{50%{transform:scale(1.12)}}
 
+/* tombol skip dihapus */
 @media (max-height:420px){#introFx .fx-stage{width:min(70vw,calc(78vh * 1.415))}}
 @media (prefers-reduced-motion:reduce){html.fx-on #introFx{display:none}html.fx-on,html.fx-on body{overflow:auto}}
